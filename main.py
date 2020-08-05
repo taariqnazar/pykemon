@@ -20,12 +20,36 @@ player_position = x, y = 1, 1
 
 quit_game = False
 
+x_change = 0
+y_change = 0
+
 # Game Loop
 while not quit_game:
     for event in pygame.event.get():
         # Handles Quitting window and cleanup
         if event.type == pygame.QUIT:
             quit_game = True
+
+        # Handles moving logic
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                x_change = -5
+            if event.key == pygame.K_RIGHT:
+                x_change = 5
+            if event.key == pygame.K_UP:
+                y_change = -5
+            if event.key == pygame.K_DOWN:
+                y_change = 5
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                x_change = 0
+            if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                y_change = 0
+
+    # Updates palyer position values
+    x += x_change
+    y += y_change
 
     game_display.fill(white)
     game_display.blit(player_img, player_position)
