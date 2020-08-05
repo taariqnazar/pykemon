@@ -1,27 +1,35 @@
-import sys
 import pygame
+
 pygame.init()
 
-size = width, height = 320, 240
-speed = [0, 0]
+# Initialize size variables
+display_size = display_width, display_height = 320, 240
+
+# Sets display size
+game_display = pygame.display.set_mode(display_size)
+# Sets window title
+pygame.display.set_caption("Pokemon")
+
+# Inititalize color variables
 black = 0, 0, 0
+white = 255, 255, 255
 
-screen = pygame.display.set_mode(size)
+player_img = pygame.image.load("images/ash_front_stand.png")
 
-ball = pygame.image.load("images/ash_front_stand.png")
-ballrect = ball.get_rect()
+player_position = x, y = 1, 1
 
-while 1:
+quit_game = False
+
+# Game Loop
+while not quit_game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            sys.exit()
+            quit_game = True
 
-    ballrect = ballrect.move(speed)
-    if ballrect.left < 0 or ballrect.right > width:
-        speed[0] = -speed[0]
-    if ballrect.top < 0 or ballrect.bottom > height:
-        speed[1] = -speed[1]
+    game_display.fill(white)
+    game_display.blit(player_img, player_position)
 
-    screen.fill(black)
-    screen.blit(ball, ballrect)
-    pygame.display.flip()
+    pygame.display.update()
+
+pygame.quit()
+quit()
