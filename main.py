@@ -34,7 +34,15 @@ class player():
             "front_walk_r": "images/ash_front_walk_right.png",
             "front_walk_l": "images/ash_front_walk_left.png",
             "back_stand": "images/ash_back_stand.png",
-            "back_walk_r": "images/ash_back_walk_right.png"}
+            "back_walk_r": "images/ash_back_walk_right.png",
+            "back_walk_l": "images/ash_back_walk_left.png",
+            "left_stand": "images/ash_left_stand.png",
+            "left_walk_r": "images/ash_left_walk_right.png",
+            "left_walk_l": "images/ash_left_walk_left.png",
+            "right_stand": "images/ash_right_stand.png",
+            "right_walk_r": "images/ash_right_walk_right.png",
+            "right_walk_l": "images/ash_right_walk_left.png",
+        }
         self.direction = 'down'
         self.foot = 'left'
 
@@ -43,15 +51,52 @@ class player():
             if self.y_change == 0:
                 self.player_img = pygame.image.load(
                     self.player_sprites['front_stand'])
-
             elif self.foot == 'left':
                 self.player_img = pygame.image.load(
                     self.player_sprites['front_walk_l'])
                 self.foot = 'right'
-
             elif self.foot == 'right':
                 self.player_img = pygame.image.load(
                     self.player_sprites['front_walk_r'])
+                self.foot = 'left'
+
+        if self.direction == 'up':
+            if self.y_change == 0:
+                self.player_img = pygame.image.load(
+                    self.player_sprites['back_stand'])
+            elif self.foot == 'left':
+                self.player_img = pygame.image.load(
+                    self.player_sprites['back_walk_l'])
+                self.foot = 'right'
+            elif self.foot == 'right':
+                self.player_img = pygame.image.load(
+                    self.player_sprites['back_walk_r'])
+                self.foot = 'left'
+
+        if self.direction == 'right':
+            if self.x_change == 0:
+                self.player_img = pygame.image.load(
+                    self.player_sprites['right_stand'])
+            elif self.foot == 'left':
+                self.player_img = pygame.image.load(
+                    self.player_sprites['right_walk_l'])
+                self.foot = 'right'
+            elif self.foot == 'right':
+                self.player_img = pygame.image.load(
+                    self.player_sprites['right_walk_r'])
+                self.foot = 'left'
+
+        if self.direction == 'left':
+            if self.x_change == 0:
+                self.player_img = pygame.image.load(
+                    self.player_sprites['left_stand'])
+            elif self.foot == 'left':
+                self.player_img = pygame.image.load(
+                    self.player_sprites['left_walk_l'])
+                self.foot = 'right'
+            elif self.foot == 'right':
+                self.player_img = pygame.image.load(
+                    self.player_sprites['left_walk_r'])
                 self.foot = 'left'
 
     def player_position(self):
@@ -78,8 +123,10 @@ while not quit_game:
                 ash.direction = 'left'
             elif event.key == pygame.K_RIGHT:
                 ash.x_change = 0.5
+                ash.direction = "right"
             elif event.key == pygame.K_UP:
                 ash.y_change = -0.5
+                ash.direction = "up"
             elif event.key == pygame.K_DOWN:
                 ash.y_change = 0.5
                 ash.direction = 'down'
