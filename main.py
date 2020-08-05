@@ -25,7 +25,7 @@ class MyGame(arcade.Window):
 
         # Setup player
         # Sprites dims 68x72
-        self.player_sprite = arcade.Sprite("images/Ash.png")
+        self.player_sprite = arcade.Sprite("images/ash_front_stand.png")
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
