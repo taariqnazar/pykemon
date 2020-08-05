@@ -14,12 +14,6 @@ pygame.display.set_caption("Pokemon")
 black = 0, 0, 0
 white = 255, 255, 255
 
-#player_img = pygame.image.load("images/ash_front_stand.png")
-
-#player_position = x, y = 1, 1
-
-quit_game = False
-
 # Player class
 
 
@@ -36,37 +30,40 @@ class player():
         self.speed = 0
         self.player_img = pygame.image.load("images/ash_front_stand.png")
         self.player_sprites = {
-            "front_stand":"images/ash_front_stand.png",
-            "front_walk_r":"images/ash_front_walk_right.png", 
-            "front_walk_l":"images/ash_front_walk_left.png",
-            "back_stand":"images/ash_back_stand.png",
+            "front_stand": "images/ash_front_stand.png",
+            "front_walk_r": "images/ash_front_walk_right.png",
+            "front_walk_l": "images/ash_front_walk_left.png",
+            "back_stand": "images/ash_back_stand.png",
             "back_walk_r": "images/ash_back_walk_right.png"}
         self.direction = 'down'
-        self.foot= 'left'
-    
+        self.foot = 'left'
+
     def change_direction(self):
         if self.direction == 'down':
             if self.y_change == 0:
-                self.player_img = pygame.image.load(self.player_sprites['front_stand'])
-            elif self.foot == 'left':
-                print(self.foot)
-                self.player_img = pygame.image.load(self.player_sprites['front_walk_l'])
-                self.foot = 'right'
-            elif self.foot == 'right':
-                print(self.foot)
-                self.player_img = pygame.image.load(self.player_sprites['front_walk_r'])
-                self.foot = 'left'
+                self.player_img = pygame.image.load(
+                    self.player_sprites['front_stand'])
 
-      
+            elif self.foot == 'left':
+                self.player_img = pygame.image.load(
+                    self.player_sprites['front_walk_l'])
+                self.foot = 'right'
+
+            elif self.foot == 'right':
+                self.player_img = pygame.image.load(
+                    self.player_sprites['front_walk_r'])
+                self.foot = 'left'
 
     def player_position(self):
         """ Returns the player position coordinates """
-
         return self.x, self.y
 
 
-# Game Loop
 ash = player()
+
+
+quit_game = False
+# Game Loop
 while not quit_game:
 
     for event in pygame.event.get():
@@ -77,36 +74,30 @@ while not quit_game:
         # Handles keyevents, i.e moving etc.
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                ash.x_change = -1
+                ash.x_change = -0.5
                 ash.direction = 'left'
             elif event.key == pygame.K_RIGHT:
-                ash.x_change = 1
+                ash.x_change = 0.5
             elif event.key == pygame.K_UP:
-                ash.y_change = -1
+                ash.y_change = -0.5
             elif event.key == pygame.K_DOWN:
-                ash.y_change = 1  
+                ash.y_change = 0.5
                 ash.direction = 'down'
-                print(1)
-                ash.change_direction()
+
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 ash.x_change = 0
             elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                 ash.y_change = 0
 
-    # Looks at the boundaries, cannot move outside of boundaries, Issue gets stuck on edge
-    if ash.x > display_width - ash.player_width or ash.x < 0:
-        ash.x_change = 0
-
-    if ash.y > display_height - ash.player_height or ash.y < 0:
-        ash.y_change = 0
+    # Added change direction logic here and it works, since KEYDOWN only runs once when the key is pressed down
+    ash.change_direction()
 
     ash.x += ash.x_change
     ash.y += ash.y_change
 
     game_display.fill(white)
     game_display.blit(ash.player_img, ash.player_position())
-  
 
     pygame.display.update()
 
