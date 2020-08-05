@@ -23,6 +23,7 @@ quit_game = False
 # Game Loop
 while not quit_game:
     for event in pygame.event.get():
+        # Handles Quitting window and cleanup
         if event.type == pygame.QUIT:
             quit_game = True
 
