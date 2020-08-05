@@ -27,7 +27,7 @@ class player():
         self.x_change = 0
         self.y_change = 0
 
-        self.speed = 0
+        self.speed = 0.25
         self.player_img = pygame.image.load("images/ash_front_stand.png")
         self.player_sprites = {
             "front_stand": "images/ash_front_stand.png",
@@ -103,35 +103,25 @@ class player():
         """ Returns the player position coordinates """
         return self.x, self.y
 
-
-ash = player()
-
-
-quit_game = False
-# Game Loop
-while not quit_game:
-
-    for event in pygame.event.get():
-        # Handles Quitting window and cleanup
-        if event.type == pygame.QUIT:
-            quit_game = True
+    def move(self, dt):
+        ''' Updates player position  '''
 
         # Handles keyevents, i.e moving etc.
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                ash.x_change = -0.5
+                ash.x_change = -ash.speed * dt
                 ash.y_change = 0
                 ash.direction = 'left'
             elif event.key == pygame.K_RIGHT:
-                ash.x_change = 0.5
+                ash.x_change = ash.speed * dt
                 ash.y_change = 0
                 ash.direction = "right"
             elif event.key == pygame.K_UP:
-                ash.y_change = -0.5
+                ash.y_change = -ash.speed * dt
                 ash.x_change = 0
                 ash.direction = "up"
             elif event.key == pygame.K_DOWN:
-                ash.y_change = 0.5
+                ash.y_change = ash.speed * dt
                 ash.x_change = 0
                 ash.direction = 'down'
 
@@ -140,6 +130,24 @@ while not quit_game:
                 ash.x_change = 0
             elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                 ash.y_change = 0
+
+
+ash = player()
+
+
+quit_game = False
+clock = pygame.time.Clock()
+dt = 0 # deltatime
+# Game Loop
+while not quit_game:
+    dt = clock.tick(30) # fps 30 ?
+    for event in pygame.event.get():
+        
+        # Handles Quitting window and cleanup
+        if event.type == pygame.QUIT:
+            quit_game = True
+        ash.move(dt)
+
 
     # Added change direction logic here and it works, since KEYDOWN only runs once when the key is pressed down
     ash.change_direction()
@@ -151,6 +159,7 @@ while not quit_game:
     game_display.blit(ash.player_img, ash.player_position())
 
     pygame.display.update()
+
 
 pygame.quit()
 quit()
