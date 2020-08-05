@@ -120,15 +120,19 @@ while not quit_game:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 ash.x_change = -0.5
+                ash.y_change = 0
                 ash.direction = 'left'
             elif event.key == pygame.K_RIGHT:
                 ash.x_change = 0.5
+                ash.y_change = 0
                 ash.direction = "right"
             elif event.key == pygame.K_UP:
                 ash.y_change = -0.5
+                ash.x_change = 0
                 ash.direction = "up"
             elif event.key == pygame.K_DOWN:
                 ash.y_change = 0.5
+                ash.x_change = 0
                 ash.direction = 'down'
 
         if event.type == pygame.KEYUP:
