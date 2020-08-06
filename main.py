@@ -1,6 +1,6 @@
 import pygame as pg
-from tiledmap import TiledMap
-from player import Player
+from TiledMap import TiledMap
+from Player import Player
 
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
@@ -17,7 +17,7 @@ class Game:
 
         self.player = Player(
             display_width=display_size[0], display_height=display_size[1])
-        self.map = TiledMap("resources/town.tmx")
+        self.map = TiledMap("resources/pallettown.tmx")
 
         self.game_running = True
 
