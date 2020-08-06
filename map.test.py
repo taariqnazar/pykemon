@@ -1,4 +1,5 @@
 import pygame as pg
+
 import sys
 
 W = 0  # Water

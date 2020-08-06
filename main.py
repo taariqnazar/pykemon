@@ -1,4 +1,5 @@
 import pygame
+from tiledmap import TiledMap
 
 pygame.init()
 
@@ -145,6 +146,11 @@ clock = pygame.time.Clock()
 
 dt = 0  # deltatime
 # Game Loop
+
+#screen.fill(white)
+map = TiledMap('poke.tmx')
+
+map_img =map.make_map()
 while not quit_game:
     dt = clock.tick(60)  # fps 30 ?
     for event in pygame.event.get():
@@ -159,8 +165,9 @@ while not quit_game:
 
     ash.x += ash.x_change
     ash.y += ash.y_change
+    game_display.blit(map_img,(0,0))
 
-    game_display.fill(white)
+    
     game_display.blit(ash.player_img, ash.player_position())
 
     pygame.draw.rect(game_display, black, [100, 100, 50, 50])
