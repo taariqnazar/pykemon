@@ -156,7 +156,7 @@ clock = pygame.time.Clock()
 dt = 0  # deltatime
 # Game Loop
 
-map = TiledMap('poke.tmx')
+map = TiledMap('town.tmx')
 map_img = map.make_map()
 
 quit_game = False
