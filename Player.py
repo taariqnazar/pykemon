@@ -16,33 +16,33 @@ class Player:
         self.velocity = 0.25
         self.player_img = pg.image.load("resources/images/ash_front_stand.png")
 
-        self.player_sprites_upd = {
+        self.player_sprites = {
             "left": {
                 "idle": ["resources/images/ash_left_stand.png"],
                 "moving": [
                     "resources/images/ash_left_walk_left.png",
-                    "resources/images/ash_left_stand.png",
+                    # "resources/images/ash_left_stand.png",
                     "resources/images/ash_left_walk_right.png"
                 ]},
             "right": {
                 "idle": ["resources/images/ash_right_stand.png"],
                 "moving": [
                     "resources/images/ash_right_walk_left.png",
-                    "resources/images/ash_right_stand.png",
+                    # "resources/images/ash_right_stand.png",
                     "resources/images/ash_right_walk_right.png"
                 ]},
             "up": {
                 "idle": ["resources/images/ash_back_stand.png"],
                 "moving": [
                     "resources/images/ash_back_walk_left.png",
-                    "resources/images/ash_back_stand.png",
+                    # "resources/images/ash_back_stand.png",
                     "resources/images/ash_back_walk_right.png"
                 ]},
             "down": {
                 "idle": ["resources/images/ash_front_stand.png"],
                 "moving": [
                     "resources/images/ash_front_walk_left.png",
-                    "resources/images/ash_front_stand.png",
+                    # "resources/images/ash_front_stand.png",
                     "resources/images/ash_front_walk_right.png"
                 ]}
         }
@@ -60,20 +60,22 @@ class Player:
         return x-self.dx, y-self.dy
 
     def change_direction(self):
+        FPS = 60
         if self.moving:
-            img = self.player_sprites_upd[self.direction]["moving"][self.counter % len(
-                self.player_sprites_upd[self.direction]["moving"])]
+            l = len(self.player_sprites[self.direction]["moving"])
+            print(l)
+            img = self.player_sprites[self.direction]["moving"][int(
+                l*self.counter / FPS)]
             self.counter += 1
             self.player_img = pg.image.load(img)
 
         else:
-            img = self.player_sprites_upd[self.direction]["idle"][self.counter % len(
-                self.player_sprites_upd[self.direction]["idle"])]
-
-            self.counter += 1
+            img = self.player_sprites[self.direction]["idle"][int(
+                self.counter / FPS)]
             self.player_img = pg.image.load(img)
+            self.counter += 1
 
-        self.counter = self.counter % 10
+        self.counter = self.counter % 60
 
     def move(self, dt):
         """ Updates player position """
