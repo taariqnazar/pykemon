@@ -17,7 +17,7 @@ class Game:
 
         self.player = Player(
             display_width=display_size[0], display_height=display_size[1])
-        self.map = TiledMap("poke.tmx")
+        self.map = TiledMap("resources/town.tmx")
 
         self.game_running = True
 

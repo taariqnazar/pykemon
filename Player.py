@@ -14,20 +14,20 @@ class Player:
         self.dy = 0
 
         self.velocity = 0.25
-        self.player_img = pg.image.load("images/ash_front_stand.png")
+        self.player_img = pg.image.load("resources/images/ash_front_stand.png")
         self.player_sprites = {
-            "front_stand": "images/ash_front_stand.png",
-            "front_walk_r": "images/ash_front_walk_right.png",
-            "front_walk_l": "images/ash_front_walk_left.png",
-            "back_stand": "images/ash_back_stand.png",
-            "back_walk_r": "images/ash_back_walk_right.png",
-            "back_walk_l": "images/ash_back_walk_left.png",
-            "left_stand": "images/ash_left_stand.png",
-            "left_walk_r": "images/ash_left_walk_right.png",
-            "left_walk_l": "images/ash_left_walk_left.png",
-            "right_stand": "images/ash_right_stand.png",
-            "right_walk_r": "images/ash_right_walk_right.png",
-            "right_walk_l": "images/ash_right_walk_left.png",
+            "front_stand": "resources/images/ash_front_stand.png",
+            "front_walk_r": "resources/images/ash_front_walk_right.png",
+            "front_walk_l": "resources/images/ash_front_walk_left.png",
+            "back_stand": "resources/images/ash_back_stand.png",
+            "back_walk_r": "resources/images/ash_back_walk_right.png",
+            "back_walk_l": "resources/images/ash_back_walk_left.png",
+            "left_stand": "resources/images/ash_left_stand.png",
+            "left_walk_r": "resources/images/ash_left_walk_right.png",
+            "left_walk_l": "resources/images/ash_left_walk_left.png",
+            "right_stand": "resources/images/ash_right_stand.png",
+            "right_walk_r": "resources/images/ash_right_walk_right.png",
+            "right_walk_l": "resources/images/ash_right_walk_left.png",
         }
         self.direction = 'down'
         self.moving = False
