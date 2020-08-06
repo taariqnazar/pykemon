@@ -63,15 +63,16 @@ class Player:
         FPS = 60
         if self.moving:
             l = len(self.player_sprites[self.direction]["moving"])
-            print(l)
+
             img = self.player_sprites[self.direction]["moving"][int(
                 l*self.counter / FPS)]
             self.counter += 1
             self.player_img = pg.image.load(img)
 
         else:
+            l = len(self.player_sprites[self.direction]["idle"])
             img = self.player_sprites[self.direction]["idle"][int(
-                self.counter / FPS)]
+                l*self.counter / FPS)]
             self.player_img = pg.image.load(img)
             self.counter += 1
 
