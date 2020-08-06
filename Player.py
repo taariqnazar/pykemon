@@ -15,23 +15,41 @@ class Player:
 
         self.velocity = 0.25
         self.player_img = pg.image.load("resources/images/ash_front_stand.png")
-        self.player_sprites = {
-            "front_stand": "resources/images/ash_front_stand.png",
-            "front_walk_r": "resources/images/ash_front_walk_right.png",
-            "front_walk_l": "resources/images/ash_front_walk_left.png",
-            "back_stand": "resources/images/ash_back_stand.png",
-            "back_walk_r": "resources/images/ash_back_walk_right.png",
-            "back_walk_l": "resources/images/ash_back_walk_left.png",
-            "left_stand": "resources/images/ash_left_stand.png",
-            "left_walk_r": "resources/images/ash_left_walk_right.png",
-            "left_walk_l": "resources/images/ash_left_walk_left.png",
-            "right_stand": "resources/images/ash_right_stand.png",
-            "right_walk_r": "resources/images/ash_right_walk_right.png",
-            "right_walk_l": "resources/images/ash_right_walk_left.png",
+
+        self.player_sprites_upd = {
+            "left": {
+                "idle": ["resources/images/ash_left_stand.png"],
+                "moving": [
+                    "resources/images/ash_left_walk_left.png",
+                    "resources/images/ash_left_stand.png",
+                    "resources/images/ash_left_walk_right.png"
+                ]},
+            "right": {
+                "idle": ["resources/images/ash_right_stand.png"],
+                "moving": [
+                    "resources/images/ash_right_walk_left.png",
+                    "resources/images/ash_right_stand.png",
+                    "resources/images/ash_right_walk_right.png"
+                ]},
+            "up": {
+                "idle": ["resources/images/ash_back_stand.png"],
+                "moving": [
+                    "resources/images/ash_back_walk_left.png",
+                    "resources/images/ash_back_stand.png",
+                    "resources/images/ash_back_walk_right.png"
+                ]},
+            "down": {
+                "idle": ["resources/images/ash_front_stand.png"],
+                "moving": [
+                    "resources/images/ash_front_walk_left.png",
+                    "resources/images/ash_front_stand.png",
+                    "resources/images/ash_front_walk_right.png"
+                ]}
         }
+        self.counter = 0
+
         self.direction = 'down'
         self.moving = False
-        self.foot = 'left'
 
     def player_position(self):
         """ Returns the player position coordinates """
@@ -42,61 +60,20 @@ class Player:
         return x-self.dx, y-self.dy
 
     def change_direction(self):
-        if self.direction == 'down':
-            if not self.moving:
-                self.player_img = pg.image.load(
-                    self.player_sprites['front_stand'])
-            else:
-                if self.foot == 'left':
-                    self.player_img = pg.image.load(
-                        self.player_sprites['front_walk_l'])
-                    self.foot = 'right'
-                elif self.foot == 'right':
-                    self.player_img = pg.image.load(
-                        self.player_sprites['front_walk_r'])
-                    self.foot = 'left'
+        if self.moving:
+            img = self.player_sprites_upd[self.direction]["moving"][self.counter % len(
+                self.player_sprites_upd[self.direction]["moving"])]
+            self.counter += 1
+            self.player_img = pg.image.load(img)
 
-        if self.direction == 'up':
-            if not self.moving:
-                self.player_img = pg.image.load(
-                    self.player_sprites['back_stand'])
-            else:
-                if self.foot == 'left':
-                    self.player_img = pg.image.load(
-                        self.player_sprites['back_walk_l'])
-                    self.foot = 'right'
-                elif self.foot == 'right':
-                    self.player_img = pg.image.load(
-                        self.player_sprites['back_walk_r'])
-                    self.foot = 'left'
+        else:
+            img = self.player_sprites_upd[self.direction]["idle"][self.counter % len(
+                self.player_sprites_upd[self.direction]["idle"])]
 
-        if self.direction == 'right':
-            if not self.moving:
-                self.player_img = pg.image.load(
-                    self.player_sprites['right_stand'])
-            else:
-                if self.foot == 'left':
-                    self.player_img = pg.image.load(
-                        self.player_sprites['right_walk_l'])
-                    self.foot = 'right'
-                elif self.foot == 'right':
-                    self.player_img = pg.image.load(
-                        self.player_sprites['right_walk_r'])
-                    self.foot = 'left'
+            self.counter += 1
+            self.player_img = pg.image.load(img)
 
-        if self.direction == 'left':
-            if not self.moving:
-                self.player_img = pg.image.load(
-                    self.player_sprites['left_stand'])
-            else:
-                if self.foot == 'left':
-                    self.player_img = pg.image.load(
-                        self.player_sprites['left_walk_l'])
-                    self.foot = 'right'
-                elif self.foot == 'right':
-                    self.player_img = pg.image.load(
-                        self.player_sprites['left_walk_r'])
-                    self.foot = 'left'
+        self.counter = self.counter % 10
 
     def move(self, dt):
         """ Updates player position """
