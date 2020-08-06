@@ -1,20 +1,30 @@
 import pygame as pg
+#PLAYER_HIT_RECT = pg.Rect(0, 0, 100, 100)
 
-
-class Player:
+class Player(pg.sprite.Sprite):
     """ Player class """
 
     def __init__(self, display_width, display_height):
+        self.player = pg.sprite.Group()
+        pg.sprite.Sprite.__init__(self, self.player)
+
         self.player_width = 100
         self.player_height = 100
         self.x = (display_width * 0.5 - self.player_width*0.5)
         self.y = (display_height * 0.5 - self.player_height*0.5)
+        
 
         self.dx = 0
         self.dy = 0
 
         self.velocity = 0.25
         self.player_img = pg.image.load("resources/images/ash_front_stand.png")
+        # rect
+        self.rect = self.player_img.get_rect()
+     
+        self.hit_rect = pg.Rect(self.x, self.y, 100, 100)
+        #self.hit_rect.center = self.rect.center
+        print(self.hit_rect)
 
         self.player_sprites = {
             "left": {
@@ -63,7 +73,7 @@ class Player:
         FPS = 60
         if self.moving:
             l = len(self.player_sprites[self.direction]["moving"])
-            print(l)
+            
             img = self.player_sprites[self.direction]["moving"][int(
                 l*self.counter / FPS)]
             self.counter += 1
@@ -108,3 +118,4 @@ class Player:
             self.moving = False
 
         self.change_direction()
+  
