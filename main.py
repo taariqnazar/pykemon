@@ -1,6 +1,6 @@
 import pygame as pg
-from TiledMap import TiledMap
-from Player import Player
+from tiledmap import TiledMap
+from player import Player
 
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
