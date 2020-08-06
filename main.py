@@ -2,11 +2,12 @@ import pygame
 
 pygame.init()
 
-# Initialize size variables
+# Initialize window size variables
 display_size = display_width, display_height = 800, 600
 
-# Sets display size
+# Sets window display size
 game_display = pygame.display.set_mode(display_size)
+
 # Sets window title
 pygame.display.set_caption("Pokemon")
 
@@ -14,10 +15,9 @@ pygame.display.set_caption("Pokemon")
 black = 0, 0, 0
 white = 255, 255, 255
 
-# Player class
-
 
 class player():
+    """ Player class """
 
     def __init__(self):
         self.player_width = 100
@@ -104,7 +104,7 @@ class player():
         return self.x, self.y
 
     def move(self, dt):
-        ''' Updates player position  '''
+        """ Updates player position """
 
         # Handles keyevents, i.e moving etc.
         if event.type == pygame.KEYDOWN:
@@ -137,17 +137,17 @@ ash = player()
 
 quit_game = False
 clock = pygame.time.Clock()
-dt = 0 # deltatime
+
+dt = 0  # deltatime
 # Game Loop
 while not quit_game:
-    dt = clock.tick(30) # fps 30 ?
+    dt = clock.tick(60)  # fps 30 ?
     for event in pygame.event.get():
-        
+
         # Handles Quitting window and cleanup
         if event.type == pygame.QUIT:
             quit_game = True
         ash.move(dt)
-
 
     # Added change direction logic here and it works, since KEYDOWN only runs once when the key is pressed down
     ash.change_direction()
