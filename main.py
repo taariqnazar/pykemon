@@ -1,187 +1,62 @@
-import pygame
-from tiledmap import TiledMap
+import pygame as pg
+from TiledMap import TiledMap
+from Player import Player
 
-pygame.init()
-
-# Initialize window size variables
-display_size = display_width, display_height = 800, 600
-
-# Sets window display size
-game_display = pygame.display.set_mode(display_size)
-
-# Sets window title
-pygame.display.set_caption("Pokemon")
-
-# Inititalize color variables
-black = 0, 0, 0
-white = 255, 255, 255
+BLACK = 0, 0, 0
+WHITE = 255, 255, 255
 
 
-class Player:
-    """ Player class """
+class Game:
+    def __init__(self, display_size=(800, 600), caption="Pokemon"):
+        pg.init()
 
-    def __init__(self):
-        self.player_width = 100
-        self.player_height = 100
-        self.x = (display_width * 0.5 - self.player_width*0.5)
-        self.y = (display_height * 0.5 - self.player_height*0.5)
+        self.display_size = display_size
 
-        self.dx = 0
-        self.dy = 0
+        self.game_display = pg.display.set_mode(display_size)
+        pg.display.set_caption(caption)
 
-        self.velocity = 0.25
-        self.player_img = pygame.image.load("images/ash_front_stand.png")
-        self.player_sprites = {
-            "front_stand": "images/ash_front_stand.png",
-            "front_walk_r": "images/ash_front_walk_right.png",
-            "front_walk_l": "images/ash_front_walk_left.png",
-            "back_stand": "images/ash_back_stand.png",
-            "back_walk_r": "images/ash_back_walk_right.png",
-            "back_walk_l": "images/ash_back_walk_left.png",
-            "left_stand": "images/ash_left_stand.png",
-            "left_walk_r": "images/ash_left_walk_right.png",
-            "left_walk_l": "images/ash_left_walk_left.png",
-            "right_stand": "images/ash_right_stand.png",
-            "right_walk_r": "images/ash_right_walk_right.png",
-            "right_walk_l": "images/ash_right_walk_left.png",
-        }
-        self.direction = 'down'
-        self.moving = False
-        self.foot = 'left'
+        self.player = Player(
+            display_width=display_size[0], display_height=display_size[1])
+        self.map = TiledMap("poke.tmx")
 
-    def player_position(self):
-        """ Returns the player position coordinates """
-        return self.x, self.y
+        self.game_running = True
 
-    def adjust_camera(self, x, y):
-        """ Shifts object by change in direction"""
-        return x-self.dx, y-self.dy
+    def run(self):
+        clock = pg.time.Clock()
+        map_img = self.map.make_map()
 
-    def change_direction(self):
-        if self.direction == 'down':
-            if not self.moving:
-                self.player_img = pygame.image.load(
-                    self.player_sprites['front_stand'])
-            else:
-                if self.foot == 'left':
-                    self.player_img = pygame.image.load(
-                        self.player_sprites['front_walk_l'])
-                    self.foot = 'right'
-                elif self.foot == 'right':
-                    self.player_img = pygame.image.load(
-                        self.player_sprites['front_walk_r'])
-                    self.foot = 'left'
+        while self.game_running:
+            dt = clock.tick(60)
+            for event in pg.event.get():
 
-        if self.direction == 'up':
-            if not self.moving:
-                self.player_img = pygame.image.load(
-                    self.player_sprites['back_stand'])
-            else:
-                if self.foot == 'left':
-                    self.player_img = pygame.image.load(
-                        self.player_sprites['back_walk_l'])
-                    self.foot = 'right'
-                elif self.foot == 'right':
-                    self.player_img = pygame.image.load(
-                        self.player_sprites['back_walk_r'])
-                    self.foot = 'left'
+                # Handles Quitting window and cleanup
+                if event.type == pg.QUIT:
+                    self.game_running = False
 
-        if self.direction == 'right':
-            if not self.moving:
-                self.player_img = pygame.image.load(
-                    self.player_sprites['right_stand'])
-            else:
-                if self.foot == 'left':
-                    self.player_img = pygame.image.load(
-                        self.player_sprites['right_walk_l'])
-                    self.foot = 'right'
-                elif self.foot == 'right':
-                    self.player_img = pygame.image.load(
-                        self.player_sprites['right_walk_r'])
-                    self.foot = 'left'
+            # Handles movement and sprite changes
+            self.player.move(dt)
 
-        if self.direction == 'left':
-            if not self.moving:
-                self.player_img = pygame.image.load(
-                    self.player_sprites['left_stand'])
-            else:
-                if self.foot == 'left':
-                    self.player_img = pygame.image.load(
-                        self.player_sprites['left_walk_l'])
-                    self.foot = 'right'
-                elif self.foot == 'right':
-                    self.player_img = pygame.image.load(
-                        self.player_sprites['left_walk_r'])
-                    self.foot = 'left'
+            # Draws what should be displayed
+            self.game_display.fill(WHITE)
+            self.game_display.blit(map_img, self.player.adjust_camera(0, 0))
+            self.game_display.blit(self.player.player_img,
+                                   self.player.player_position())
 
-    def move(self, dt):
-        """ Updates player position """
+            # Testiong moving rectangle
+            r_x, r_y = self.player.adjust_camera(0, 0)
+            pg.draw.rect(self.game_display, BLACK, [r_x, r_y, 50, 50])
 
-        dx = self.velocity*dt
-        dy = self.velocity*dt
+            pg.display.update()
 
-        key = pygame.key.get_pressed()
-        if key[pygame.K_RIGHT]:
-            #ash.x += self.velocity*dt
-            ash.dx += dx
-            ash.moving = True
-            ash.direction = "right"
-
-        elif key[pygame.K_LEFT]:
-            #ash.x -= self.velocity*dt
-            ash.dx -= dx
-            ash.moving = True
-            ash.direction = "left"
-
-        elif key[pygame.K_DOWN]:
-            #ash.y += self.velocity*dt
-            ash.dy += dy
-            ash.moving = True
-            ash.direction = "down"
-
-        elif key[pygame.K_UP]:
-            #ash.y -= self.velocity*dt
-            ash.dy -= dy
-            ash.moving = True
-            ash.direction = "up"
-
-        else:
-            ash.moving = False
+        pg.quit()
+        quit()
 
 
-ash = Player()
+def main():
+    game = Game()
+    game.run()
 
 
-clock = pygame.time.Clock()
-dt = 0  # deltatime
-# Game Loop
-
-map = TiledMap('town.tmx')
-map_img = map.make_map()
-
-quit_game = False
-while not quit_game:
-    dt = clock.tick(60)  # fps 30 ?
-    for event in pygame.event.get():
-
-        # Handles Quitting window and cleanup
-        if event.type == pygame.QUIT:
-            quit_game = True
-
-    ash.move(dt)
-
-    # Added change direction logic here and it works, since KEYDOWN only runs once when the key is pressed down
-    ash.change_direction()
-
-    game_display.fill(white)
-    game_display.blit(map_img, ash.adjust_camera(0, 0))
-    game_display.blit(ash.player_img, ash.player_position())
-
-    r_x, r_y = ash.adjust_camera(0, 0)
-    pygame.draw.rect(game_display, black, [r_x, r_y, 50, 50])
-
-    pygame.display.update()
-
-
-pygame.quit()
-quit()
+print(__name__)
+if __name__ == "__main__":
+    main()
