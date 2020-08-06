@@ -16,7 +16,7 @@ black = 0, 0, 0
 white = 255, 255, 255
 
 
-class player():
+class Player():
     """ Player class """
 
     def __init__(self):
@@ -132,7 +132,12 @@ class player():
                 ash.y_change = 0
 
 
-ash = player()
+class Camera:
+    def __init__(self):
+        pass
+
+
+ash = Player()
 
 
 quit_game = False
@@ -147,7 +152,7 @@ while not quit_game:
         # Handles Quitting window and cleanup
         if event.type == pygame.QUIT:
             quit_game = True
-        ash.move(dt)
+        # ash.move(dt)
 
     # Added change direction logic here and it works, since KEYDOWN only runs once when the key is pressed down
     ash.change_direction()
@@ -158,6 +163,7 @@ while not quit_game:
     game_display.fill(white)
     game_display.blit(ash.player_img, ash.player_position())
 
+    pygame.draw.rect(game_display, black, [100, 100, 50, 50])
     pygame.display.update()
 
 
