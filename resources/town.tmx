@@ -200,14 +200,14 @@
   <object id="164" gid="1004" x="150" y="768.5" width="32" height="32"/>
   <object id="165" gid="1005" x="182" y="769.5" width="32" height="32"/>
   <object id="166" gid="1006" x="213.5" y="768.5" width="32" height="32"/>
-  <object id="167" gid="30" x="800" y="894" width="32" height="32"/>
-  <object id="168" gid="30" x="673" y="896" width="32" height="32"/>
-  <object id="169" gid="30" x="932" y="898" width="32" height="32"/>
+  <object id="167" name="wall" gid="30" x="800" y="894" width="32" height="32"/>
+  <object id="168" name="wall" gid="30" x="673" y="896" width="32" height="32"/>
+  <object id="169" name="wall" gid="30" x="932" y="898" width="32" height="32"/>
   <object id="170" gid="32" x="868" y="192" width="32" height="32"/>
-  <object id="171" gid="28" x="387" y="283" width="32" height="32"/>
-  <object id="172" gid="28" x="386" y="320" width="32" height="32"/>
-  <object id="173" gid="28" x="349" y="319" width="32" height="32"/>
-  <object id="174" gid="28" x="351" y="284" width="32" height="32"/>
+  <object id="171" name="wall" gid="28" x="387" y="283" width="32" height="32"/>
+  <object id="172" name="wall" gid="28" x="386" y="320" width="32" height="32"/>
+  <object id="173" name="wall" gid="28" x="349" y="319" width="32" height="32"/>
+  <object id="174" name="wall" gid="28" x="351" y="284" width="32" height="32"/>
   <object id="175" gid="12" x="0" y="448" width="32" height="32"/>
   <object id="176" gid="12" x="2" y="482" width="32" height="32"/>
   <object id="177" gid="12" x="-1" y="512" width="32" height="32"/>
