@@ -42,10 +42,6 @@ class Game:
             self.game_display.blit(self.player.player_img,
                                    self.player.player_position())
 
-            # Testiong moving rectangle
-            r_x, r_y = self.player.adjust_camera(0, 0)
-            pg.draw.rect(self.game_display, BLACK, [r_x, r_y, 50, 50])
-
             pg.display.update()
 
         pg.quit()
