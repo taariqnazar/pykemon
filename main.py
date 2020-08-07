@@ -6,44 +6,67 @@ from Obstacle import Obstacle
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
 CYAN = 0, 255, 255
-
 def collide_hit_rect(one, two):
     return one.hit_rect.colliderect(two.rect)
 
 def check_collision(sprite, group):
     hits = pg.sprite.spritecollide(sprite, group, False, collide_hit_rect)
-    if sprite.moving:
-        if sprite.direction == 'left' or sprite.direction == 'right':
-            if hits:
-                #print("wall")
-                if hits[0].rect.centerx > sprite.hit_rect.centerx:
-                    if sprite.direction == 'right' and sprite.moving:
-                        if sprite.hit_rect.bottomright[0] > hits[0].rect.bottomleft[0]:
-                            sprite.dx -= (sprite.deltax + (sprite.hit_rect.bottomright[0]-hits[0].rect.bottomleft[0]) + 3 )
-                        else:
-                            sprite.dx -= sprite.deltax 
-                if hits[0].rect.centerx < sprite.hit_rect.centerx:
-                    if sprite.direction == 'left'and sprite.moving:
-                        if sprite.hit_rect.bottomleft[0] < hits[0].rect.bottomright[0]:
-                            sprite.dx += (sprite.deltax - (sprite.hit_rect.bottomleft[0]-hits[0].rect.bottomright[0]) -1 )                        
-                        else:
-                            sprite.dx +=sprite.deltax
-        elif sprite.direction == 'up' or sprite.direction == 'down':
-            if hits:
-                print(hits[0].rect.topright[1])
-                print(sprite.hit_rect.bottomleft[1])
-                if hits[0].rect.centery < sprite.hit_rect.centery:
-                    if sprite.direction == 'up' and sprite.moving:
-                        if hits[0].rect.bottomright[1] < sprite.hit_rect.topright[1]:
-                            sprite.dy += sprite.deltay + (sprite.hit_rect.topright[1]-hits[0].rect.bottomright[1] ) +3
-                        else:
-                            sprite.dy += sprite.deltay
-                if hits[0].rect.centery > sprite.hit_rect.centery:
-                    if sprite.direction == 'down'and sprite.moving:
-                        if hits[0].rect.topright[1] < sprite.hit_rect.bottomright[1]:
-                           sprite.dy -= -(hits[0].rect.topright[1] - sprite.hit_rect.bottomright[1]    ) 
-                        sprite.dy -= sprite.deltay
-                  
+    if sprite.direction == 'left' or sprite.direction == 'right':
+        if hits:
+            if hits[0].rect.centerx > sprite.hit_rect.centerx:
+                if sprite.direction == 'right':
+                    if sprite.hit_rect.bottomright[0] >= hits[0].rect.bottomleft[0] :
+                        overlap = sprite.hit_rect.bottomright[0]-hits[0].rect.bottomleft[0]
+                        if sprite.moving == False:
+                           sprite.dx -=  overlap
+                           sprite.moving = True                  
+                        else:                 
+                            sprite.dx -= sprite.deltax + overlap
+                            sprite.velocity = 0
+                            sprite.moving = False
+
+                            
+               
+
+            elif hits[0].rect.centerx < sprite.hit_rect.centerx:
+                if sprite.direction == 'left':
+                    if sprite.hit_rect.bottomleft[0] <= hits[0].rect.bottomright[0]:
+                        overlap = sprite.hit_rect.bottomleft[0] - hits[0].rect.bottomright[0]
+                        if sprite.moving == False:
+                           sprite.dx -=  overlap
+                           sprite.moving = True
+                        else:                        
+                            sprite.dx += (sprite.deltax - overlap)
+                            sprite.velocity = 0
+                            sprite.moving = False                            
+
+
+    elif sprite.direction == 'up' or sprite.direction == 'down':
+        if hits:
+            if hits[0].rect.centery < sprite.hit_rect.centery:
+                if sprite.direction == 'up':
+                   if sprite.hit_rect.topright[1] <= hits[0].rect.bottomright[1]: 
+                        overlap = sprite.hit_rect.topright[1] - hits[0].rect.bottomright[1]
+                        if sprite.moving == False:
+                            sprite.dy -=  overlap
+                            sprite.moving = True
+
+                        else:                         
+                            sprite.dy -= (-sprite.deltay + overlap)
+                            sprite.velocity = 0
+                            sprite.moving = False
+
+            if hits[0].rect.centery >= sprite.hit_rect.centery:
+                if sprite.direction == 'down':
+                   if sprite.hit_rect.bottomright[1] >= hits[0].rect.topright[1]: 
+                        overlap = sprite.hit_rect.bottomright[1] - hits[0].rect.topright[1]
+                        if sprite.moving == False:
+                            sprite.dy -=  overlap
+                            sprite.moving = True
+                        else:                         
+                            sprite.dy -= (sprite.deltay + overlap)
+                            sprite.velocity = 0
+                            sprite.moving = False                
 
 
 class Game:
@@ -61,6 +84,7 @@ class Game:
 
         self.game_running = True
 
+
     def new(self):
         #initialize variables
         self.walls = pg.sprite.Group()
@@ -73,7 +97,7 @@ class Game:
         clock = pg.time.Clock()
         map_img = self.map.make_map()
         self.new()
-
+        debugmode = False
         while self.game_running:
             dt = clock.tick(60)
             for event in pg.event.get():
@@ -81,27 +105,35 @@ class Game:
                 # Handles Quitting window and cleanup   
                 if event.type == pg.QUIT:
                     self.game_running = False
-
-
+            
+            key = pg.key.get_pressed()
+            if pg.key.get_pressed()[pg.K_f]:    # hold f to open debug mode
+                debugmode = True
+            else:
+                debugmode = False
 
             # Handles movement and sprite changes
 
             self.player.move(dt)
+            #print(self.player.moving)
             check_collision(self.player, self.walls)
 
-            # Draws what should be displayed
+            self.player.moving = True
+
             self.game_display.fill(WHITE)
             self.game_display.blit(map_img, self.player.adjust_camera(0, 0))
             self.game_display.blit(self.player.player_img,
                                    self.player.player_position())
             
-            # draws the hitboxes for 
-            pg.draw.rect(self.game_display, CYAN, self.player.hit_rect, 1)
+            # draws the hitboxes for player and wall for debugging purposes and updates hitboxes
+            if debugmode:
+                pg.draw.rect(self.game_display, CYAN, self.player.hit_rect, 1)
 
             for wall in self.walls:
                 if self.player.moving:
-                    wall.adjust_camera(self.player.dx, self.player.dy) # actually important !, updates hitbox for walls
-                pg.draw.rect(self.game_display, CYAN, wall.rect, 1)    
+                    wall.adjust_camera(self.player.dx, self.player.dy) # (important) updates hitbox for walls
+                if debugmode:
+                    pg.draw.rect(self.game_display, CYAN, wall.rect, 1)    
 
 
             pg.display.update()

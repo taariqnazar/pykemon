@@ -8,23 +8,23 @@ class Player(pg.sprite.Sprite):
         self.player = pg.sprite.Group()
         pg.sprite.Sprite.__init__(self, self.player)
 
-        self.player_width = 100
-        self.player_height = 100
+        self.player_width = 50
+        self.player_height = 50
         self.x = (display_width * 0.5 - self.player_width*0.5)
         self.y = (display_height * 0.5 - self.player_height*0.5)
         
 
         self.dx = 0
         self.dy = 0
+
         self.deltax = 0
         self.deltay = 0
 
         self.velocity = 0.25
         self.player_img = pg.image.load("resources/images/ash_front_stand.png")
         # rect
-        self.rect = self.player_img.get_rect()
-     
-        self.hit_rect = pg.Rect(self.x, self.y, 50, 50)
+        #self.rect = self.player_img.get_rect()
+        self.hit_rect = pg.Rect(self.x+ 7.5, self.y + 7.5, self.player_height, self.player_height)
         #self.hit_rect.center = self.rect.center
         print(self.hit_rect)
 
@@ -91,11 +91,37 @@ class Player(pg.sprite.Sprite):
 
     def move(self, dt):
         """ Updates player position """
+        key = pg.key.get_pressed()
+
+        if self.velocity == 0:
+            if self.direction == 'right':
+                if key[pg.K_RIGHT] == 1:
+                   return 1
+                elif key[pg.K_RIGHT] == 0 :
+                    self.velocity = 0.25                
+
+            if self.direction == 'left':
+                if key[pg.K_LEFT] == 1:
+                    return 1
+                elif key[pg.K_LEFT] == 0 :
+                    self.velocity = 0.25  
+
+            if self.direction == 'up':
+                if key[pg.K_UP] == 1:
+                    return 1
+                elif key[pg.K_UP] == 0 :
+                    self.velocity = 0.25  
+
+            if self.direction == 'down':
+                if key[pg.K_DOWN] == 1:
+                   return 1
+                elif key[pg.K_DOWN] == 0 :
+                    self.velocity = 0.25  
+    
 
         self.deltax = self.velocity*dt
         self.deltay = self.velocity*dt
 
-        key = pg.key.get_pressed()
         if key[pg.K_RIGHT]:
             self.dx += self.deltax
             self.moving = True
@@ -120,4 +146,5 @@ class Player(pg.sprite.Sprite):
             self.moving = False
 
         self.change_direction()
+        
   
