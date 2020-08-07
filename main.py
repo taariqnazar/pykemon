@@ -10,29 +10,40 @@ CYAN = 0, 255, 255
 def collide_hit_rect(one, two):
     return one.hit_rect.colliderect(two.rect)
 
-def check_collision(sprite, group, dir):
+def check_collision(sprite, group):
     hits = pg.sprite.spritecollide(sprite, group, False, collide_hit_rect)
-    if dir == 'left' or dir == 'right':
-        if hits:
-            print("wall")
-            if hits[0].rect.centerx > sprite.hit_rect.centerx:
-                if sprite.direction == 'right':
-                    sprite.dx = 0
-            if hits[0].rect.centerx < sprite.hit_rect.centerx:
-                if sprite.direction == 'left':
-                    sprite.dx = 0
-        #sprite.vel.x = 0
-        #sprite.hit_rect.centerx = sprite.x
-    elif dir == 'up' or dir == 'down':
-        if hits:
-            print("wall")
-            if hits[0].rect.centery > sprite.hit_rect.centery:
-                if sprite.direction == 'up':
-                    sprite.dy = 0
+    if sprite.moving:
+        if sprite.direction == 'left' or sprite.direction == 'right':
+            if hits:
+                #print("wall")
+                if hits[0].rect.centerx > sprite.hit_rect.centerx:
+                    if sprite.direction == 'right' and sprite.moving:
+                        if sprite.hit_rect.bottomright[0] > hits[0].rect.bottomleft[0]:
+                            sprite.dx -= (sprite.deltax + (sprite.hit_rect.bottomright[0]-hits[0].rect.bottomleft[0]) + 3 )
+                        else:
+                            sprite.dx -= sprite.deltax 
                 if hits[0].rect.centerx < sprite.hit_rect.centerx:
-                    if sprite.direction == 'down':
-                        sprite.dy = 0
-    
+                    if sprite.direction == 'left'and sprite.moving:
+                        if sprite.hit_rect.bottomleft[0] < hits[0].rect.bottomright[0]:
+                            sprite.dx += (sprite.deltax - (sprite.hit_rect.bottomleft[0]-hits[0].rect.bottomright[0]) -1 )                        
+                        else:
+                            sprite.dx +=sprite.deltax
+        elif sprite.direction == 'up' or sprite.direction == 'down':
+            if hits:
+                print(hits[0].rect.topright[1])
+                print(sprite.hit_rect.bottomleft[1])
+                if hits[0].rect.centery < sprite.hit_rect.centery:
+                    if sprite.direction == 'up' and sprite.moving:
+                        if hits[0].rect.bottomright[1] < sprite.hit_rect.topright[1]:
+                            sprite.dy += sprite.deltay + (sprite.hit_rect.topright[1]-hits[0].rect.bottomright[1] ) +3
+                        else:
+                            sprite.dy += sprite.deltay
+                if hits[0].rect.centery > sprite.hit_rect.centery:
+                    if sprite.direction == 'down'and sprite.moving:
+                        if hits[0].rect.topright[1] < sprite.hit_rect.bottomright[1]:
+                           sprite.dy -= -(hits[0].rect.topright[1] - sprite.hit_rect.bottomright[1]    ) 
+                        sprite.dy -= sprite.deltay
+                  
 
 
 class Game:
@@ -76,7 +87,7 @@ class Game:
             # Handles movement and sprite changes
 
             self.player.move(dt)
-            check_collision(self.player, self.walls, self.player.direction)
+            check_collision(self.player, self.walls)
 
             # Draws what should be displayed
             self.game_display.fill(WHITE)

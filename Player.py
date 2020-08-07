@@ -16,6 +16,8 @@ class Player(pg.sprite.Sprite):
 
         self.dx = 0
         self.dy = 0
+        self.deltax = 0
+        self.deltay = 0
 
         self.velocity = 0.25
         self.player_img = pg.image.load("resources/images/ash_front_stand.png")
@@ -90,27 +92,27 @@ class Player(pg.sprite.Sprite):
     def move(self, dt):
         """ Updates player position """
 
-        dx = self.velocity*dt
-        dy = self.velocity*dt
+        self.deltax = self.velocity*dt
+        self.deltay = self.velocity*dt
 
         key = pg.key.get_pressed()
         if key[pg.K_RIGHT]:
-            self.dx += dx
+            self.dx += self.deltax
             self.moving = True
             self.direction = "right"
 
         elif key[pg.K_LEFT]:
-            self.dx -= dx
+            self.dx -= self.deltax
             self.moving = True
             self.direction = "left"
 
         elif key[pg.K_DOWN]:
-            self.dy += dy
+            self.dy += self.deltay
             self.moving = True
             self.direction = "down"
 
         elif key[pg.K_UP]:
-            self.dy -= dy
+            self.dy -= self.deltay
             self.moving = True
             self.direction = "up"
 
