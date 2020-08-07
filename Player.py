@@ -22,7 +22,7 @@ class Player(pg.sprite.Sprite):
         # rect
         self.rect = self.player_img.get_rect()
      
-        self.hit_rect = pg.Rect(self.x, self.y, 100, 100)
+        self.hit_rect = pg.Rect(self.x, self.y, 50, 50)
         #self.hit_rect.center = self.rect.center
         print(self.hit_rect)
 

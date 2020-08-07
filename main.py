@@ -10,10 +10,29 @@ CYAN = 0, 255, 255
 def collide_hit_rect(one, two):
     return one.hit_rect.colliderect(two.rect)
 
-def check_collision(sprite, group):
+def check_collision(sprite, group, dir):
     hits = pg.sprite.spritecollide(sprite, group, False, collide_hit_rect)
-    if hits:
-        print('wall')
+    if dir == 'left' or dir == 'right':
+        if hits:
+            print("wall")
+            if hits[0].rect.centerx > sprite.hit_rect.centerx:
+                if sprite.direction == 'right':
+                    sprite.dx = 0
+            if hits[0].rect.centerx < sprite.hit_rect.centerx:
+                if sprite.direction == 'left':
+                    sprite.dx = 0
+        #sprite.vel.x = 0
+        #sprite.hit_rect.centerx = sprite.x
+    elif dir == 'up' or dir == 'down':
+        if hits:
+            print("wall")
+            if hits[0].rect.centery > sprite.hit_rect.centery:
+                if sprite.direction == 'up':
+                    sprite.dy = 0
+                if hits[0].rect.centerx < sprite.hit_rect.centerx:
+                    if sprite.direction == 'down':
+                        sprite.dy = 0
+    
 
 
 class Game:
@@ -35,9 +54,10 @@ class Game:
         #initialize variables
         self.walls = pg.sprite.Group()
         for tile_object in self.map.tmxdata.objects:
-            if tile_object.name == 'wall':
+            if tile_object.name == 'wall' or tile_object.name == 'item'or tile_object.name == 'rock' or tile_object.name == 'water':
                 Obstacle(self, tile_object.x, tile_object.y,
                         tile_object.width, tile_object.height)
+
     def run(self):
         clock = pg.time.Clock()
         map_img = self.map.make_map()
@@ -54,21 +74,23 @@ class Game:
 
 
             # Handles movement and sprite changes
+
             self.player.move(dt)
-            check_collision(self.player, self.walls)
+            check_collision(self.player, self.walls, self.player.direction)
 
             # Draws what should be displayed
             self.game_display.fill(WHITE)
             self.game_display.blit(map_img, self.player.adjust_camera(0, 0))
             self.game_display.blit(self.player.player_img,
                                    self.player.player_position())
-                        # debug
-            pg.draw.rect(self.game_display, CYAN, self.player.hit_rect, 1)
             
+            # draws the hitboxes for 
+            pg.draw.rect(self.game_display, CYAN, self.player.hit_rect, 1)
+
             for wall in self.walls:
-                wall.adjust_camera(self.player.dx, self.player.dy) # actually important, updates hitbox
-                pg.draw.rect(self.game_display, CYAN, wall.hit_rect, 1)
-                #print(wall.hit_rect)    
+                if self.player.moving:
+                    wall.adjust_camera(self.player.dx, self.player.dy) # actually important !, updates hitbox for walls
+                pg.draw.rect(self.game_display, CYAN, wall.rect, 1)    
 
 
             pg.display.update()
