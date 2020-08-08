@@ -1,6 +1,7 @@
 import pygame as pg
 #PLAYER_HIT_RECT = pg.Rect(0, 0, 100, 100)
 
+
 class Player(pg.sprite.Sprite):
     """ Player class """
 
@@ -8,22 +9,22 @@ class Player(pg.sprite.Sprite):
         self.player = pg.sprite.Group()
         pg.sprite.Sprite.__init__(self, self.player)
 
-        self.player_width = 50
-        self.player_height = 50
+        self.player_width = 30
+        self.player_height = 30
         self.x = (display_width * 0.5 - self.player_width*0.5)
         self.y = (display_height * 0.5 - self.player_height*0.5)
-        
 
         self.dx = 0
         self.dy = 0
-        # deltax/y = distance to move 
-        self.deltax = 0 
+        # deltax/y = distance to move
+        self.deltax = 0
         self.deltay = 0
 
         self.velocity = 0.25
         self.player_img = pg.image.load("resources/images/ash_front_stand.png")
 
-        self.hit_rect = pg.Rect(self.x+ 7.5, self.y + 7.5, self.player_height, self.player_height) # hitbox
+        self.hit_rect = pg.Rect(
+            self.x + self.player_width*0.5, self.y + self.player_height*0.5, self.player_width, self.player_height)  # hitbox
 
         print(self.hit_rect)
 
@@ -74,7 +75,7 @@ class Player(pg.sprite.Sprite):
         FPS = 60
         if self.moving:
             l = len(self.player_sprites[self.direction]["moving"])
-            
+
             img = self.player_sprites[self.direction]["moving"][int(
                 l*self.counter / FPS)]
             self.counter += 1
@@ -93,9 +94,9 @@ class Player(pg.sprite.Sprite):
         """ Updates player position """
         key = pg.key.get_pressed()
         keydict = {
-            'right' : pg.K_RIGHT,
+            'right': pg.K_RIGHT,
             'left': pg.K_LEFT,
-            'up' : pg.K_UP,
+            'up': pg.K_UP,
             'down': pg.K_DOWN
         }
 
@@ -135,5 +136,3 @@ class Player(pg.sprite.Sprite):
             self.moving = False
 
         self.change_direction()
-        
-  
