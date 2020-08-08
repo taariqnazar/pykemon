@@ -9,7 +9,7 @@ CYAN = 0, 255, 255
 
 
 class Game:
-    def __init__(self, display_size=(800, 600), caption="Pokemon"):
+    def __init__(self, display_size=(800, 600), caption="Pokemon", debug_mode = False):
         pg.init()
 
         self.display_size = display_size
@@ -22,9 +22,12 @@ class Game:
         self.map = TiledMap("resources/pallettown.tmx")
 
         self.game_running = True
+        
+        self.init_obstacles()
 
+        self.debug_mode = debug_mode
 
-    def new(self):
+    def init_obstacles(self):
         #initialize variables
         self.walls = pg.sprite.Group()
         for tile_object in self.map.tmxdata.objects:
@@ -36,8 +39,7 @@ class Game:
     def run(self):
         clock = pg.time.Clock()
         map_img = self.map.make_map()
-        self.new()
-        debugmode = False
+
         while self.game_running:
             dt = clock.tick(60)
             for event in pg.event.get():
@@ -47,10 +49,11 @@ class Game:
                     self.game_running = False
             
             key = pg.key.get_pressed()
+            
             if pg.key.get_pressed()[pg.K_f]:    # hold f to open debug mode
-                debugmode = True
+                debug_mode = True
             else:
-                debugmode = False
+                debug_mode = False
 
             # Handles movement and sprite changes
 
@@ -63,13 +66,13 @@ class Game:
                                    self.player.player_position())
             
             # draws the hitboxes for player and wall for debugging purposes and updates hitboxes
-            if debugmode:
+            if debug_mode:
                 pg.draw.rect(self.game_display, CYAN, self.player.hit_rect, 1)
 
             for wall in self.walls:
                 if self.player.moving:
                     wall.adjust_camera(self.player.dx, self.player.dy) # (important) updates hitbox for walls
-                if debugmode:
+                if debug_mode:
                     pg.draw.rect(self.game_display, CYAN, wall.rect, 1)    
 
 

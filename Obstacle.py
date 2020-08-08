@@ -8,8 +8,8 @@ class Obstacle(pg.sprite.Sprite):
         self.rect = pg.Rect(x, y, w, h)
         self.start_x = x
         self.start_y = y
-        self.x= x
-        self.y =y
+        # self.x= x
+        #self.y =y
         self.rect.x = x
         self.rect.y= y
         #print(self.hit_rect)

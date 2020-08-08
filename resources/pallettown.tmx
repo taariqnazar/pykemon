@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="42">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="45">
  <tileset firstgid="1" source="Complete Johto Tileset.tsx"/>
  <layer id="1" name="grass" width="32" height="32">
   <data encoding="csv">
@@ -131,12 +131,13 @@
   </object>
   <object id="34" name="water" x="416" y="32" width="384" height="128"/>
   <object id="35" name="wall" x="0" y="0" width="384" height="160"/>
-  <object id="36" name="wall" x="768" y="224" width="160" height="96"/>
+  <object id="36" name="wall" x="768" y="256" width="160" height="64"/>
   <object id="37" name="wall" x="768" y="320" width="64" height="32"/>
   <object id="38" name="wall" x="864" y="320" width="64" height="32"/>
   <object id="39" name="wall" x="512" y="416" width="224" height="160"/>
   <object id="40" name="wall" x="480" y="704" width="160" height="128"/>
   <object id="41" x="384" y="896"/>
+  <object id="44" name="roof" x="770" y="234.667" width="158" height="21.3333"/>
  </objectgroup>
  <layer id="3" name="sign" width="32" height="32">
   <data encoding="csv">
