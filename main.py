@@ -6,63 +6,6 @@ from Obstacle import Obstacle
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
 CYAN = 0, 255, 255
-def collide_hit_rect(one, two):
-    return one.hit_rect.colliderect(two.rect)
-
-def check_collision(sprite, group):
-    hits = pg.sprite.spritecollide(sprite, group, False, collide_hit_rect)
-    if sprite.direction == 'left' or sprite.direction == 'right':
-        if hits:
-            if hits[0].rect.centerx > sprite.hit_rect.centerx:
-                if sprite.direction == 'right':
-                    if sprite.hit_rect.bottomright[0] >= hits[0].rect.bottomleft[0] :
-                        overlap = sprite.hit_rect.bottomright[0]-hits[0].rect.bottomleft[0]
-                        if sprite.moving == False:
-                           sprite.dx -=  overlap
-                           sprite.moving = True                  
-                        else:                 
-                            sprite.dx -= sprite.deltax + overlap
-                            sprite.velocity = 0
-
-                            
-               
-
-            elif hits[0].rect.centerx < sprite.hit_rect.centerx:
-                if sprite.direction == 'left':
-                    if sprite.hit_rect.bottomleft[0] <= hits[0].rect.bottomright[0]:
-                        overlap = sprite.hit_rect.bottomleft[0] - hits[0].rect.bottomright[0]
-                        if sprite.moving == False:
-                           sprite.dx -=  overlap
-                           sprite.moving = True
-                        else:                        
-                            sprite.dx += (sprite.deltax - overlap)
-                            sprite.velocity = 0                       
-
-
-    elif sprite.direction == 'up' or sprite.direction == 'down':
-        if hits:
-            if hits[0].rect.centery < sprite.hit_rect.centery:
-                if sprite.direction == 'up':
-                   if sprite.hit_rect.topright[1] <= hits[0].rect.bottomright[1]: 
-                        overlap = sprite.hit_rect.topright[1] - hits[0].rect.bottomright[1]
-                        if sprite.moving == False:
-                            sprite.dy -=  overlap
-                            sprite.moving = True
-
-                        else:                   
-                            sprite.dy -= (-sprite.deltay + overlap)
-                            sprite.velocity = 0
-
-            if hits[0].rect.centery >= sprite.hit_rect.centery:
-                if sprite.direction == 'down':
-                   if sprite.hit_rect.bottomright[1] >= hits[0].rect.topright[1]: 
-                        overlap = sprite.hit_rect.bottomright[1] - hits[0].rect.topright[1]
-                        if sprite.moving == False:
-                            sprite.dy -=  overlap
-                            sprite.moving = True
-                        else:                         
-                            sprite.dy -= (sprite.deltay + overlap)
-                            sprite.velocity = 0         
 
 
 class Game:
@@ -111,8 +54,8 @@ class Game:
 
             # Handles movement and sprite changes
 
-            self.player.move(dt)
-            check_collision(self.player, self.walls)
+            self.player.move(dt, self.walls)
+            
 
             self.game_display.fill(WHITE)
             self.game_display.blit(map_img, self.player.adjust_camera(0, 0))
