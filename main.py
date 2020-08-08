@@ -23,7 +23,6 @@ def check_collision(sprite, group):
                         else:                 
                             sprite.dx -= sprite.deltax + overlap
                             sprite.velocity = 0
-                            sprite.moving = False
 
                             
                
@@ -37,8 +36,7 @@ def check_collision(sprite, group):
                            sprite.moving = True
                         else:                        
                             sprite.dx += (sprite.deltax - overlap)
-                            sprite.velocity = 0
-                            sprite.moving = False                            
+                            sprite.velocity = 0                       
 
 
     elif sprite.direction == 'up' or sprite.direction == 'down':
@@ -51,10 +49,9 @@ def check_collision(sprite, group):
                             sprite.dy -=  overlap
                             sprite.moving = True
 
-                        else:                         
+                        else:                   
                             sprite.dy -= (-sprite.deltay + overlap)
                             sprite.velocity = 0
-                            sprite.moving = False
 
             if hits[0].rect.centery >= sprite.hit_rect.centery:
                 if sprite.direction == 'down':
@@ -65,8 +62,7 @@ def check_collision(sprite, group):
                             sprite.moving = True
                         else:                         
                             sprite.dy -= (sprite.deltay + overlap)
-                            sprite.velocity = 0
-                            sprite.moving = False                
+                            sprite.velocity = 0         
 
 
 class Game:
@@ -89,7 +85,8 @@ class Game:
         #initialize variables
         self.walls = pg.sprite.Group()
         for tile_object in self.map.tmxdata.objects:
-            if tile_object.name == 'wall' or tile_object.name == 'item'or tile_object.name == 'rock' or tile_object.name == 'water':
+            if (tile_object.name == 'wall' or tile_object.name == 'item'or
+                tile_object.name == 'rock' or tile_object.name == 'water'):
                 Obstacle(self, tile_object.x, tile_object.y,
                         tile_object.width, tile_object.height)
 
@@ -115,10 +112,7 @@ class Game:
             # Handles movement and sprite changes
 
             self.player.move(dt)
-            #print(self.player.moving)
             check_collision(self.player, self.walls)
-
-            self.player.moving = True
 
             self.game_display.fill(WHITE)
             self.game_display.blit(map_img, self.player.adjust_camera(0, 0))

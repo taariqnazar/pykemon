@@ -16,16 +16,15 @@ class Player(pg.sprite.Sprite):
 
         self.dx = 0
         self.dy = 0
-
-        self.deltax = 0
+        # deltax/y = distance to move 
+        self.deltax = 0 
         self.deltay = 0
 
         self.velocity = 0.25
         self.player_img = pg.image.load("resources/images/ash_front_stand.png")
-        # rect
-        #self.rect = self.player_img.get_rect()
-        self.hit_rect = pg.Rect(self.x+ 7.5, self.y + 7.5, self.player_height, self.player_height)
-        #self.hit_rect.center = self.rect.center
+
+        self.hit_rect = pg.Rect(self.x+ 7.5, self.y + 7.5, self.player_height, self.player_height) # hitbox
+
         print(self.hit_rect)
 
         self.player_sprites = {
@@ -93,32 +92,21 @@ class Player(pg.sprite.Sprite):
     def move(self, dt):
         """ Updates player position """
         key = pg.key.get_pressed()
+        keydict = {
+            'right' : pg.K_RIGHT,
+            'left': pg.K_LEFT,
+            'up' : pg.K_UP,
+            'down': pg.K_DOWN
+        }
 
         if self.velocity == 0:
-            if self.direction == 'right':
-                if key[pg.K_RIGHT] == 1:
-                   return 1
-                elif key[pg.K_RIGHT] == 0 :
-                    self.velocity = 0.25                
-
-            if self.direction == 'left':
-                if key[pg.K_LEFT] == 1:
-                    return 1
-                elif key[pg.K_LEFT] == 0 :
-                    self.velocity = 0.25  
-
-            if self.direction == 'up':
-                if key[pg.K_UP] == 1:
-                    return 1
-                elif key[pg.K_UP] == 0 :
-                    self.velocity = 0.25  
-
-            if self.direction == 'down':
-                if key[pg.K_DOWN] == 1:
-                   return 1
-                elif key[pg.K_DOWN] == 0 :
-                    self.velocity = 0.25  
-    
+            for dir in ['right', 'left', 'up', 'down']:
+                if self.direction == dir:
+                    if key[keydict[dir]] == 1:
+                        self.change_direction()
+                        return 1
+                    elif key[keydict[dir]] == 0:
+                        self.velocity = 0.25
 
         self.deltax = self.velocity*dt
         self.deltay = self.velocity*dt
