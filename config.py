@@ -1,0 +1,6 @@
+BLACK = 0, 0, 0
+WHITE = 255, 255, 255
+CYAN = 0, 255, 255
+
+DISPLAY_SIZE = (800, 600)
+CAPTION = "Pokemon"

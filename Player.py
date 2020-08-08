@@ -1,29 +1,32 @@
 import pygame as pg
-#PLAYER_HIT_RECT = pg.Rect(0, 0, 100, 100)
+from config import DISPLAY_SIZE
+
 
 class Player(pg.sprite.Sprite):
     """ Player class """
 
-    def __init__(self, display_width, display_height):
+    def __init__(self):
         self.player = pg.sprite.Group()
         pg.sprite.Sprite.__init__(self, self.player)
+
+        display_width, display_height = DISPLAY_SIZE
 
         self.player_width = 50
         self.player_height = 50
         self.x = (display_width * 0.5 - self.player_width*0.5)
         self.y = (display_height * 0.5 - self.player_height*0.5)
-        
 
         self.dx = 0
         self.dy = 0
-        # deltax/y = distance to move 
-        self.deltax = 0 
+        # deltax/y = distance to move
+        self.deltax = 0
         self.deltay = 0
 
         self.velocity = 0.25
         self.player_img = pg.image.load("resources/images/ash_front_stand.png")
 
-        self.hit_rect = pg.Rect(self.x+ 7.5, self.y + 7.5, self.player_width, self.player_height) # hitbox
+        self.hit_rect = pg.Rect(
+            self.x + 7.5, self.y + 7.5, self.player_width, self.player_height)  # hitbox
 
         print(self.hit_rect)
 
@@ -74,7 +77,7 @@ class Player(pg.sprite.Sprite):
         FPS = 60
         if self.moving:
             l = len(self.player_sprites[self.direction]["moving"])
-            
+
             img = self.player_sprites[self.direction]["moving"][int(
                 l*self.counter / FPS)]
             self.counter += 1
@@ -93,9 +96,9 @@ class Player(pg.sprite.Sprite):
         """ Updates player position """
         key = pg.key.get_pressed()
         keydict = {
-            'right' : pg.K_RIGHT,
+            'right': pg.K_RIGHT,
             'left': pg.K_LEFT,
-            'up' : pg.K_UP,
+            'up': pg.K_UP,
             'down': pg.K_DOWN
         }
 
@@ -137,7 +140,6 @@ class Player(pg.sprite.Sprite):
         self.change_direction()
         self.check_collision(obstacles)
 
-        
     def check_collision(self, group):
         obstacles = []
         for obstacle in group:
@@ -145,57 +147,56 @@ class Player(pg.sprite.Sprite):
 
         hit = self.hit_rect.collidelist(obstacles)
         hits = False if hit == -1 else True
-    
+
         if self.direction == 'left' or self.direction == 'right':
             if hits:
                 if obstacles[hit].centerx > self.hit_rect.centerx:
                     if self.direction == 'right':
-                        if self.hit_rect.bottomright[0] >= obstacles[hit].bottomleft[0] :
-                            overlap = self.hit_rect.bottomright[0]-obstacles[hit].bottomleft[0]
+                        if self.hit_rect.bottomright[0] >= obstacles[hit].bottomleft[0]:
+                            overlap = self.hit_rect.bottomright[0] - \
+                                obstacles[hit].bottomleft[0]
                             if self.moving == False:
-                                self.dx -=  overlap
-                                self.moving = True                  
-                            else:                 
+                                self.dx -= overlap
+                                self.moving = True
+                            else:
                                 self.dx -= self.deltax + overlap
                                 self.velocity = 0
-
-                                
-                
 
                 elif obstacles[hit].centerx < self.hit_rect.centerx:
                     if self.direction == 'left':
                         if self.hit_rect.bottomleft[0] <= obstacles[hit].bottomright[0]:
-                            overlap = self.hit_rect.bottomleft[0] - obstacles[hit].bottomright[0]
+                            overlap = self.hit_rect.bottomleft[0] - \
+                                obstacles[hit].bottomright[0]
                             if self.moving == False:
-                                self.dx -=  overlap
+                                self.dx -= overlap
                                 self.moving = True
-                            else:                        
+                            else:
                                 self.dx += (self.deltax - overlap)
-                                self.velocity = 0                       
-
+                                self.velocity = 0
 
         elif self.direction == 'up' or self.direction == 'down':
             if hits:
                 if obstacles[hit].centery < self.hit_rect.centery:
                     if self.direction == 'up':
-                        if self.hit_rect.topright[1] <= obstacles[hit].bottomright[1]: 
-                            overlap = self.hit_rect.topright[1] - obstacles[hit].bottomright[1]
+                        if self.hit_rect.topright[1] <= obstacles[hit].bottomright[1]:
+                            overlap = self.hit_rect.topright[1] - \
+                                obstacles[hit].bottomright[1]
                             if self.moving == False:
-                                self.dy -=  overlap
+                                self.dy -= overlap
                                 self.moving = True
 
-                            else:                   
+                            else:
                                 self.dy -= (-self.deltay + overlap)
                                 self.velocity = 0
 
                 if obstacles[hit].centery >= self.hit_rect.centery:
                     if self.direction == 'down':
-                        if self.hit_rect.bottomright[1] >= obstacles[hit].topright[1]: 
-                            overlap = self.hit_rect.bottomright[1] - obstacles[hit].topright[1]
+                        if self.hit_rect.bottomright[1] >= obstacles[hit].topright[1]:
+                            overlap = self.hit_rect.bottomright[1] - \
+                                obstacles[hit].topright[1]
                             if self.moving == False:
-                                self.dy -=  overlap
+                                self.dy -= overlap
                                 self.moving = True
-                            else:                         
+                            else:
                                 self.dy -= (self.deltay + overlap)
-                                self.velocity = 0         
-
+                                self.velocity = 0
