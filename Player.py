@@ -1,16 +1,24 @@
 import pygame as pg
-#PLAYER_HIT_RECT = pg.Rect(0, 0, 100, 100)
+from config import DISPLAY_SIZE
 
 
 class Player(pg.sprite.Sprite):
     """ Player class """
 
-    def __init__(self, display_width, display_height):
+    def __init__(self):
         self.player = pg.sprite.Group()
         pg.sprite.Sprite.__init__(self, self.player)
 
+
+<< << << < HEAD
         self.player_width = 30
         self.player_height = 30
+== == == =
+        display_width, display_height = DISPLAY_SIZE
+
+        self.player_width = 50
+        self.player_height = 50
+>>>>>> > Cleanup
         self.x = (display_width * 0.5 - self.player_width*0.5)
         self.y = (display_height * 0.5 - self.player_height*0.5)
 
@@ -24,11 +32,15 @@ class Player(pg.sprite.Sprite):
         self.player_img = pg.image.load("resources/images/ash_front_stand.png")
 
         self.hit_rect = pg.Rect(
+<< << << < HEAD
             self.x + self.player_width*0.5, self.y + self.player_height*0.5, self.player_width, self.player_height)  # hitbox
 
         print(self.hit_rect)
+== == == =
+            self.x + 7.5, self.y + 7.5, self.player_width, self.player_height)  # hitbox
+>> >>>> > Cleanup
 
-        self.player_sprites = {
+        self.player_sprites={
             "left": {
                 "idle": ["resources/images/ash_left_stand.png"],
                 "moving": [
@@ -78,7 +90,6 @@ class Player(pg.sprite.Sprite):
 
             img = self.player_sprites[self.direction]["moving"][int(
                 l*self.counter / FPS)]
-            self.counter += 1
             self.player_img = pg.image.load(img)
 
         else:
@@ -86,11 +97,10 @@ class Player(pg.sprite.Sprite):
             img = self.player_sprites[self.direction]["idle"][int(
                 l*self.counter / FPS)]
             self.player_img = pg.image.load(img)
-            self.counter += 1
 
-        self.counter = self.counter % 60
+        self.counter = (self.counter + 1) % 60
 
-    def move(self, dt):
+    def move(self, dt, obstacles):
         """ Updates player position """
         key = pg.key.get_pressed()
         keydict = {
@@ -136,3 +146,65 @@ class Player(pg.sprite.Sprite):
             self.moving = False
 
         self.change_direction()
+        self.check_collision(obstacles)
+
+    def check_collision(self, group):
+        obstacles = []
+        for obstacle in group:
+            obstacles.append(obstacle.rect)
+
+        hit = self.hit_rect.collidelist(obstacles)
+        hits = False if hit == -1 else True
+
+        if self.direction == 'left' or self.direction == 'right':
+            if hits:
+                if obstacles[hit].centerx > self.hit_rect.centerx:
+                    if self.direction == 'right':
+                        if self.hit_rect.bottomright[0] >= obstacles[hit].bottomleft[0]:
+                            overlap = self.hit_rect.bottomright[0] - \
+                                obstacles[hit].bottomleft[0]
+                            if self.moving == False:
+                                self.dx -= overlap
+                                self.moving = True
+                            else:
+                                self.dx -= self.deltax + overlap
+                                self.velocity = 0
+
+                elif obstacles[hit].centerx < self.hit_rect.centerx:
+                    if self.direction == 'left':
+                        if self.hit_rect.bottomleft[0] <= obstacles[hit].bottomright[0]:
+                            overlap = self.hit_rect.bottomleft[0] - \
+                                obstacles[hit].bottomright[0]
+                            if self.moving == False:
+                                self.dx -= overlap
+                                self.moving = True
+                            else:
+                                self.dx += (self.deltax - overlap)
+                                self.velocity = 0
+
+        elif self.direction == 'up' or self.direction == 'down':
+            if hits:
+                if obstacles[hit].centery < self.hit_rect.centery:
+                    if self.direction == 'up':
+                        if self.hit_rect.topright[1] <= obstacles[hit].bottomright[1]:
+                            overlap = self.hit_rect.topright[1] - \
+                                obstacles[hit].bottomright[1]
+                            if self.moving == False:
+                                self.dy -= overlap
+                                self.moving = True
+
+                            else:
+                                self.dy -= (-self.deltay + overlap)
+                                self.velocity = 0
+
+                if obstacles[hit].centery >= self.hit_rect.centery:
+                    if self.direction == 'down':
+                        if self.hit_rect.bottomright[1] >= obstacles[hit].topright[1]:
+                            overlap = self.hit_rect.bottomright[1] - \
+                                obstacles[hit].topright[1]
+                            if self.moving == False:
+                                self.dy -= overlap
+                                self.moving = True
+                            else:
+                                self.dy -= (self.deltay + overlap)
+                                self.velocity = 0

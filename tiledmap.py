@@ -2,25 +2,53 @@ import pytmx
 import pygame as pg
 import sys
 
+from NewObstacle import NewObstacle
+from Obstacle import Obstacle
+
 
 class TiledMap:
     def __init__(self, filename):
-        tm = pytmx.load_pygame(filename, pixelalpha=True)
-        self.width = tm.width * tm.tilewidth
-        self.height = tm.height * tm.tileheight
-        self.tmxdata = tm
+        self.tmxdata = pytmx.load_pygame(filename, pixelalpha=True)
+        self.width = self.tmxdata.width * self.tmxdata.tilewidth
+        self.height = self.tmxdata.height * self.tmxdata.tileheight
 
-    def render(self, surface):
+        self.tiles = {
+            "grass": [],
+            "building": [],
+            "sign": [],
+            "obstacles": []
+        }
+
+    def load_tiles(self):
         ti = self.tmxdata.get_tile_image_by_gid
         for layer in self.tmxdata.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid, in layer:
                     tile = ti(gid)
+
                     if tile:
-                        surface.blit(
-                            tile, (x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight))
+                        _obstacle = NewObstacle(
+                            tile, ((x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight)))
+                        self.tiles[layer.name].append(_obstacle)
+            else:
+                for tile_object in self.tmxdata.objects:
+                    if (tile_object.name == 'wall' or tile_object.name == 'item'or
+                            tile_object.name == 'rock' or tile_object.name == 'water'):
+                        _obstacle = Obstacle(tile_object.x, tile_object.y,
+                                             tile_object.width, tile_object.height)
+                        self.tiles[layer.name].append(_obstacle)
 
     def make_map(self):
         temp_surface = pg.Surface((self.width, self.height))
-        self.render(temp_surface)
+        self.load_tiles()
         return temp_surface
+
+    def blit_objects(self, surface, arr):
+        for obj in arr:
+            surface.blit(
+                obj.surface, obj.pos
+            )
+
+    def rerender_map(self, filename):
+        self.tmxdata = pytmx.load_pygame(filename, pixelalpha=True)
+        self.make_map()
