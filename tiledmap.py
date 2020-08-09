@@ -32,11 +32,9 @@ class TiledMap:
                         self.tiles[layer.name].append(_obstacle)
             else:
                 for tile_object in self.tmxdata.objects:
-                    if (tile_object.name == 'wall' or tile_object.name == 'item'or
-                            tile_object.name == 'rock' or tile_object.name == 'water'):
-                        _obstacle = Obstacle(tile_object.x, tile_object.y,
-                                             tile_object.width, tile_object.height)
-                        self.tiles[layer.name].append(_obstacle)
+                    _obstacle = Obstacle(tile_object.x, tile_object.y,
+                                        tile_object.width, tile_object.height)
+                    self.tiles[layer.name].append(_obstacle)
 
     def make_map(self):
         temp_surface = pg.Surface((self.width, self.height))
@@ -50,5 +48,11 @@ class TiledMap:
             )
 
     def rerender_map(self, filename):
+        self.tiles = {
+            "grass": [],
+            "building": [],
+            "sign": [],
+            "obstacles": []
+        }
         self.tmxdata = pytmx.load_pygame(filename, pixelalpha=True)
         self.make_map()

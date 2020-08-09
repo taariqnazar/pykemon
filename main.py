@@ -37,7 +37,8 @@ class Game:
             key = pg.key.get_pressed()
 
             if key[pg.K_a]:
-                self.map.rerender_map("resources/town.tmx")
+                
+                self.map.rerender_map("resources/new.tmx")
 
             if pg.key.get_pressed()[pg.K_f]:    # hold f to open debug mode
                 self.debug_mode = True
