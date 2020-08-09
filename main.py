@@ -18,13 +18,12 @@ class Game:
         self.map = TiledMap("resources/pallettown.tmx")
         self.map_surface = self.map.make_map()
 
-        self.init_obstacles()
+        # self.init_obstacles()
 
         self.debug_mode = debug_mode
         self.game_running = False
 
-        #self.walls = []
-
+    """
     def init_obstacles(self):
         # initialize variables
         self.walls = pg.sprite.Group()
@@ -33,6 +32,7 @@ class Game:
                     tile_object.name == 'rock' or tile_object.name == 'water'):
                 Obstacle(self.walls, tile_object.x, tile_object.y,
                          tile_object.width, tile_object.height)
+    """
 
     def run(self):
         clock = pg.time.Clock()
@@ -47,38 +47,49 @@ class Game:
 
             key = pg.key.get_pressed()
 
+            if key[pg.K_a]:
+                self.map.rerender_map("resources/town.tmx")
+
             if pg.key.get_pressed()[pg.K_f]:    # hold f to open debug mode
                 self.debug_mode = True
             else:
                 self.debug_mode = False
 
             # Handles movement and sprite changes
-            self.player.move(dt, self.walls)
+            self.adjust_camera_obstacles(self.map.tiles["obstacles"])
+            self.player.move(dt, self.map.tiles["obstacles"])
 
             # Handles drawing
             self.game_display.fill(WHITE)
-            self.game_display.blit(
-                self.map_surface, self.adjust_camera((0, 0), (self.player.dx, self.player.dy)))
+
+            self.render_tiles(self.map.tiles["grass"])
+            self.render_tiles(self.map.tiles["sign"])
             self.game_display.blit(self.player.player_img,
                                    self.player.player_position())
+            self.render_tiles(self.map.tiles["building"])
 
-            # draws the hitboxes for player and wall for debugging purposes and updates hitboxes
             if self.debug_mode:
                 pg.draw.rect(self.game_display, CYAN, self.player.hit_rect, 1)
 
-            # """
-            for wall in self.walls:
-                if self.player.moving:
-                    # (important) updates hitbox for walls
-                    wall.rect.x, wall.rect.y = self.adjust_camera(
-                        (wall.x, wall.y), (self.player.dx, self.player.dy))
-                if self.debug_mode:
-                    pg.draw.rect(self.game_display, CYAN, wall.rect, 1)
-            # """
+                for wall in self.map.tiles["obstacles"]:
+                    if self.debug_mode:
+                        pg.draw.rect(self.game_display, CYAN, wall.rect, 1)
 
             pg.display.update()
         pg.quit()
         quit()
+
+    def render_tiles(self, arr_tiles):
+        for tile in arr_tiles:
+            self.game_display.blit(
+                tile.surface, self.adjust_camera(
+                    tile.position, (self.player.dx, self.player.dy))
+            )
+
+    def adjust_camera_obstacles(self, arr):
+        for obs in arr:
+            obs.rect.x, obs.rect.y = self.adjust_camera(
+                (obs.x, obs.y), (self.player.dx, self.player.dy))
 
     def adjust_camera(self, pos, player_pos):
         x, y = pos

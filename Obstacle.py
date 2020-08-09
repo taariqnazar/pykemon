@@ -2,13 +2,10 @@ import pygame as pg
 
 
 class Obstacle(pg.sprite.Sprite):
-    def __init__(self, walls, x, y, w, h):
-        self.groups = walls
-        pg.sprite.Sprite.__init__(self, self.groups)
-
+    def __init__(self, x, y, w, h):
         self.rect = pg.Rect(x, y, w, h)
-        self.x = x
-        self.y = y
+
+        self.position = self.x, self.y = x, y
 
         self.rect.x = x
         self.rect.y = y
