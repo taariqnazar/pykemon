@@ -47,8 +47,11 @@ class Game:
 
             # Handles movement and sprite changes
             self.adjust_camera_obstacles(self.map.tiles["obstacles"])
-            self.player.move(dt, self.map.tiles["obstacles"])
-
+            ok = self.player.move(dt, self.map.tiles["obstacles"])
+            print(ok)
+            if ok ==True:
+                print("a")
+                self.map.rerender_map("resources/pallettown.tmx")
             # Handles drawing
             self.game_display.fill(WHITE)
 
@@ -61,7 +64,7 @@ class Game:
             if self.debug_mode:
                 pg.draw.rect(self.game_display, CYAN, self.player.hit_rect, 1)
 
-                for wall in self.map.tiles["obstacles"]:
+                for wall in self.map.tiles["obstacles"]["obstacles"]:
                     if self.debug_mode:
                         pg.draw.rect(self.game_display, CYAN, wall.rect, 1)
 
@@ -77,9 +80,11 @@ class Game:
             )
 
     def adjust_camera_obstacles(self, arr):
-        for obs in arr:
-            obs.rect.x, obs.rect.y = self.adjust_camera(
-                (obs.x, obs.y), (self.player.dx, self.player.dy))
+        for key in arr.keys():
+            
+            for obs in arr[key]:
+                obs.rect.x, obs.rect.y = self.adjust_camera(
+                    (obs.x, obs.y), (self.player.dx, self.player.dy))
 
     def adjust_camera(self, pos, player_pos):
         x, y = pos
