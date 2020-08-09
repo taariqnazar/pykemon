@@ -27,7 +27,7 @@ class Player(pg.sprite.Sprite):
         self.player_img = pg.image.load("resources/images/ash_front_stand.png")
 
         self.hit_rect = pg.Rect(
-            self.x, self.y, self.player_width, self.player_height)  # hitbox
+            self.x + 20, self.y + 20, self.player_width, self.player_height)  # hitbox
 
         self.player_sprites = {
             "left": {
@@ -135,48 +135,32 @@ class Player(pg.sprite.Sprite):
             self.moving = False
 
         self.change_direction()
-        self.check_collision(obstacles)
+        if self.check_collision(obstacles) == 'door':
+            return 'door'
 
     def check_collision(self, group):
         evn = ""
+        obstacles = []
+        hit = ""
+        hits = False
+        
         for key in group.keys():
             obstacles = []
             for obstacle in group[key]:
                 obstacles.append(obstacle.rect)
 
             hit = self.hit_rect.collidelist(obstacles)
-            #print(hit)
-            #(print(obstacles))
             hits = False if hit == -1 else True
             
             if hits: 
-                
                 evn = key
-                print(evn)
+                #print(evn)
                 break
 
         
     
         if evn == 'obstacles':
-            
-            #
-            obstacles = []
-            for obstacle in group[evn]:
-                obstacles.append(obstacle.rect)
 
-            hit = self.hit_rect.collidelist(obstacles)
-            hits = False if hit == -1 else True
-
-            
-            
-            obstacles = []
-            for obstacle in group[evn]:
-                obstacles.append(obstacle.rect)
-
-            hit = self.hit_rect.collidelist(obstacles)
-            hits = False if hit == -1 else True
-            
-            #
             
             if self.direction == 'left' or self.direction == 'right':
                 if hits:
@@ -233,15 +217,6 @@ class Player(pg.sprite.Sprite):
         
         elif evn == "door":
             if self.direction == 'up':
-                
-                print(self.direction)
-                return True
-                
-            
-            obstacles = []
-            for obstacle in group[evn]:
-                obstacles.append(obstacle.rect)
+                return 'door'
 
-            hit = self.hit_rect.collidelist(obstacles)
-            hits = False if hit == -1 else True
             

@@ -16,6 +16,8 @@ class TiledMap:
             "grass": [],
             "building": [],
             "sign": [],
+            "items": [],
+            "roof": [],
             "obstacles": {"obstacles": [],
                           "door": []
                           }
@@ -33,6 +35,7 @@ class TiledMap:
                         _obstacle = NewObstacle(
                             tile, ((x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight)))
                         self.tiles[layer.name].append(_obstacle)
+                        
         for tile_group in self.tmxdata.objectgroups:
             for tile_object in tile_group:
                 _obstacle = Obstacle(tile_object.x, tile_object.y,
@@ -56,10 +59,13 @@ class TiledMap:
             "grass": [],
             "building": [],
             "sign": [],
+            "items": [],
+            "roof": [],
             "obstacles": {"obstacles": [],
                           "door": []
                           }
         }
+
         self.tmxdata = pytmx.load_pygame(filename, pixelalpha=True)
         self.make_map()
-        
+            

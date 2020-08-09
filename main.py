@@ -25,7 +25,6 @@ class Game:
 
     def run(self):
         clock = pg.time.Clock()
-
         self.game_running = True
         while self.game_running:
             dt = clock.tick(60)
@@ -37,8 +36,9 @@ class Game:
             key = pg.key.get_pressed()
 
             if key[pg.K_a]:
-                
+                self.fade(0, 255, 15)
                 self.map.rerender_map("resources/new.tmx")
+                self.fade(255,0, -15)
 
             if pg.key.get_pressed()[pg.K_f]:    # hold f to open debug mode
                 self.debug_mode = True
@@ -47,19 +47,30 @@ class Game:
 
             # Handles movement and sprite changes
             self.adjust_camera_obstacles(self.map.tiles["obstacles"])
-            ok = self.player.move(dt, self.map.tiles["obstacles"])
-            print(ok)
-            if ok ==True:
-                print("a")
+            player_event = self.player.move(dt, self.map.tiles["obstacles"])
+
+
+            if player_event == 'door':
+                self.fade(0, 255, 15)
                 self.map.rerender_map("resources/pallettown.tmx")
+                
+                self.fade(255, 0, -15)
+                
+                self.player.dx += self.player.deltax
+                self.player.dy += self.player.deltay
+                
+                
             # Handles drawing
+            
             self.game_display.fill(WHITE)
 
             self.render_tiles(self.map.tiles["grass"])
             self.render_tiles(self.map.tiles["sign"])
+            self.render_tiles(self.map.tiles["building"])
+            self.render_tiles(self.map.tiles["items"])
             self.game_display.blit(self.player.player_img,
                                    self.player.player_position())
-            self.render_tiles(self.map.tiles["building"])
+            self.render_tiles(self.map.tiles["roof"])
 
             if self.debug_mode:
                 pg.draw.rect(self.game_display, CYAN, self.player.hit_rect, 1)
@@ -101,6 +112,22 @@ class Game:
         else:
             self.debug_mode = False
         pass
+    
+    def fade(self, start, end , reduce):
+        for opacity in range(start, end, reduce):
+            
+            self.render_tiles(self.map.tiles["grass"])
+            self.render_tiles(self.map.tiles["sign"])
+            self.render_tiles(self.map.tiles["building"])
+            self.render_tiles(self.map.tiles["items"])
+            self.render_tiles(self.map.tiles["roof"])
+            
+            s = pg.Surface((1500,1500))  # the size of your rect
+            s.set_alpha(opacity)                # alpha level
+            s.fill((0,0,0))           # this fills the entire surface
+            self.game_display.blit(s, (0,0))   
+            pg.display.flip()
+            pg.time.wait(20)
 
 
 def main():
