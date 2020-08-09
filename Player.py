@@ -9,16 +9,11 @@ class Player(pg.sprite.Sprite):
         self.player = pg.sprite.Group()
         pg.sprite.Sprite.__init__(self, self.player)
 
-
-<< << << < HEAD
-        self.player_width = 30
-        self.player_height = 30
-== == == =
-        display_width, display_height = DISPLAY_SIZE
-
         self.player_width = 50
         self.player_height = 50
->>>>>> > Cleanup
+
+        display_width, display_height = DISPLAY_SIZE
+
         self.x = (display_width * 0.5 - self.player_width*0.5)
         self.y = (display_height * 0.5 - self.player_height*0.5)
 
@@ -32,15 +27,9 @@ class Player(pg.sprite.Sprite):
         self.player_img = pg.image.load("resources/images/ash_front_stand.png")
 
         self.hit_rect = pg.Rect(
-<< << << < HEAD
-            self.x + self.player_width*0.5, self.y + self.player_height*0.5, self.player_width, self.player_height)  # hitbox
+            self.x, self.y, self.player_width, self.player_height)  # hitbox
 
-        print(self.hit_rect)
-== == == =
-            self.x + 7.5, self.y + 7.5, self.player_width, self.player_height)  # hitbox
->> >>>> > Cleanup
-
-        self.player_sprites={
+        self.player_sprites = {
             "left": {
                 "idle": ["resources/images/ash_left_stand.png"],
                 "moving": [
