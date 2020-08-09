@@ -28,8 +28,6 @@ class Player(pg.sprite.Sprite):
         self.hit_rect = pg.Rect(
             self.x + 7.5, self.y + 7.5, self.player_width, self.player_height)  # hitbox
 
-        print(self.hit_rect)
-
         self.player_sprites = {
             "left": {
                 "idle": ["resources/images/ash_left_stand.png"],
@@ -80,7 +78,6 @@ class Player(pg.sprite.Sprite):
 
             img = self.player_sprites[self.direction]["moving"][int(
                 l*self.counter / FPS)]
-            self.counter += 1
             self.player_img = pg.image.load(img)
 
         else:
@@ -88,9 +85,8 @@ class Player(pg.sprite.Sprite):
             img = self.player_sprites[self.direction]["idle"][int(
                 l*self.counter / FPS)]
             self.player_img = pg.image.load(img)
-            self.counter += 1
 
-        self.counter = self.counter % 60
+        self.counter = (self.counter + 1) % 60
 
     def move(self, dt, obstacles):
         """ Updates player position """

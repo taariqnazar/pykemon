@@ -21,15 +21,16 @@ class TiledMap:
     def load_tiles(self):
         ti = self.tmxdata.get_tile_image_by_gid
         for layer in self.tmxdata.visible_layers:
-            # print(layer.name)
-
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid, in layer:
                     tile = ti(gid)
+
                     if tile:
                         _obstacle = NewObstacle(
                             tile, ((x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight)))
                         self.tiles[layer.name].append(_obstacle)
+            else:
+                print(layer)
 
     def make_map(self):
         temp_surface = pg.Surface((self.width, self.height))
