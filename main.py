@@ -10,18 +10,20 @@ from config import *
 class Game:
     def __init__(self, debug_mode=False):
         pg.init()
-        self.game_display = pg.display.set_mode(DISPLAY_SIZE)
         pg.display.set_caption(CAPTION)
 
-        self.player = Player()
+        self.game_display = pg.display.set_mode(DISPLAY_SIZE)
 
+        self.player = Player()
         self.map = TiledMap("resources/pallettown.tmx")
         self.map_surface = self.map.make_map()
+
         self.init_obstacles()
 
         self.debug_mode = debug_mode
-
         self.game_running = False
+
+        #self.walls = []
 
     def init_obstacles(self):
         # initialize variables
@@ -53,6 +55,7 @@ class Game:
             # Handles movement and sprite changes
             self.player.move(dt, self.walls)
 
+            # Handles drawing
             self.game_display.fill(WHITE)
             self.game_display.blit(
                 self.map_surface, self.adjust_camera((0, 0), (self.player.dx, self.player.dy)))
@@ -63,6 +66,7 @@ class Game:
             if self.debug_mode:
                 pg.draw.rect(self.game_display, CYAN, self.player.hit_rect, 1)
 
+            # """
             for wall in self.walls:
                 if self.player.moving:
                     # (important) updates hitbox for walls
@@ -70,6 +74,7 @@ class Game:
                         (wall.x, wall.y), (self.player.dx, self.player.dy))
                 if self.debug_mode:
                     pg.draw.rect(self.game_display, CYAN, wall.rect, 1)
+            # """
 
             pg.display.update()
         pg.quit()
