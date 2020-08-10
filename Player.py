@@ -222,4 +222,7 @@ class Player(pg.sprite.Sprite):
             #if self.direction == 'up':
             return obs
 
-            
+        elif evn == "item":
+            key = pg.key.get_pressed()
+            if pg.key.get_pressed()[pg.K_x]:  
+                return obs

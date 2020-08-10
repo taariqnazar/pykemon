@@ -52,16 +52,35 @@ class Game:
             player_event = self.player.move(dt, self.map.tiles["obstacles"])
 
 
-            if player_event != None:
-                self.fade(0, 255, 15)
-                print(player_event)
-                
-                self.player.dx = self.maps[player_event.id][1]
-                self.player.dy = self.maps[player_event.id][2]
-                self.map.rerender_map(self.maps[player_event.id][0])
-                
-                self.fade(255, 0, -15)
-                
+            if player_event !=None:
+                if player_event.type == "door":
+                    self.fade(0, 255, 15)
+                    print(player_event)
+                    
+                    self.player.dx = self.maps[player_event.id][1]
+                    self.player.dy = self.maps[player_event.id][2]
+                    self.map.rerender_map(self.maps[player_event.id][0])
+                    
+                    self.fade(255, 0, -15)
+                elif player_event.type =="item" :
+                    print("gacha")
+                    item= ""
+                    obstacle = ""
+                    
+                    for i in self.map.tiles["items"]:
+                        if i.position == ((800, 256)):
+                            item= i
+                            
+                    for i in self.map.tiles["obstacles"]["obstacles"]:
+                        print(player_event.id) 
+                        if i.id == player_event.id:
+                            obstacle= i
+                    
+                    self.map.tiles["obstacles"]["item"].remove(player_event)
+                    self.map.tiles["items"].remove(item)
+                    self.map.tiles["obstacles"]["obstacles"].remove(obstacle)
+                    
+                    
             # Handles drawing
             
             self.game_display.fill(WHITE)
@@ -90,6 +109,10 @@ class Game:
                 tile.surface, self.adjust_camera(
                     tile.position, (self.player.dx, self.player.dy))
             )
+            
+    #def render_item(self, items):
+        #for tile in items:
+            #self.game_display.blit(tile.)
 
     def adjust_camera_obstacles(self, arr):
         for key in arr.keys():

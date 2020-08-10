@@ -19,7 +19,9 @@ class TiledMap:
             "items": [],
             "roof": [],
             "obstacles": {"obstacles": [],
-                          "door": []
+                          "door": [],
+                          "item": []
+                          
                           }
         }
 
@@ -33,13 +35,13 @@ class TiledMap:
 
                     if tile:
                         _obstacle = NewObstacle(
-                            tile, ((x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight)))
+                            tile, ((x * self.tmxdata.tilewidth, y * self.tmxdata.tileheight)),gid)
                         self.tiles[layer.name].append(_obstacle)
                         
         for tile_group in self.tmxdata.objectgroups:
             for tile_object in tile_group:
                 _obstacle = Obstacle(tile_object.x, tile_object.y,
-                                    tile_object.width, tile_object.height, tile_object.name)
+                                    tile_object.width, tile_object.height, tile_object.name,tile_group.name )
                 self.tiles["obstacles"][tile_group.name].append(_obstacle)
 
     def make_map(self):
@@ -62,7 +64,9 @@ class TiledMap:
             "items": [],
             "roof": [],
             "obstacles": {"obstacles": [],
-                          "door": []
+                          "door": [],
+                          "item": []
+                          
                           }
         }
 
