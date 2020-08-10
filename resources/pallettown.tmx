@@ -38,9 +38,8 @@
 </data>
  </layer>
  <objectgroup id="5" name="door">
-  <object id="45" x="192" y="384" width="32" height="32"/>
-  <object id="46" x="192" y="800" width="32" height="32"/>
-  <object id="47" x="832" y="320" width="32" height="32"/>
+  <object id="45" name="pokecenter" x="192" y="384" width="32" height="32"/>
+  <object id="46" name="pokecenter" x="192" y="800" width="32" height="32"/>
  </objectgroup>
  <layer id="2" name="building" width="32" height="32">
   <data encoding="csv">

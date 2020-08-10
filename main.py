@@ -15,6 +15,8 @@ class Game:
         self.game_display = pg.display.set_mode(DISPLAY_SIZE)
 
         self.player = Player()
+        self.maps = {'home': ["resources/pallettown.tmx", 442, 181],
+                    'pokecenter' :["resources/new.tmx", 220, 335]}
         self.map = TiledMap("resources/pallettown.tmx")
         self.map_surface = self.map.make_map()
 
@@ -50,20 +52,19 @@ class Game:
             player_event = self.player.move(dt, self.map.tiles["obstacles"])
 
 
-            if player_event == 'door':
+            if player_event != None:
                 self.fade(0, 255, 15)
-                self.map.rerender_map("resources/pallettown.tmx")
+                print(player_event)
+                
+                self.player.dx = self.maps[player_event.id][1]
+                self.player.dy = self.maps[player_event.id][2]
+                self.map.rerender_map(self.maps[player_event.id][0])
                 
                 self.fade(255, 0, -15)
-                
-                self.player.dx += self.player.deltax
-                self.player.dy += self.player.deltay
-                
                 
             # Handles drawing
             
             self.game_display.fill(WHITE)
-
             self.render_tiles(self.map.tiles["grass"])
             self.render_tiles(self.map.tiles["sign"])
             self.render_tiles(self.map.tiles["building"])

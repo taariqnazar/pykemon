@@ -39,7 +39,7 @@ class TiledMap:
         for tile_group in self.tmxdata.objectgroups:
             for tile_object in tile_group:
                 _obstacle = Obstacle(tile_object.x, tile_object.y,
-                                    tile_object.width, tile_object.height, tile_group.name)
+                                    tile_object.width, tile_object.height, tile_object.name)
                 self.tiles["obstacles"][tile_group.name].append(_obstacle)
 
     def make_map(self):

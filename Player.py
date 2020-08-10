@@ -1,4 +1,5 @@
 import pygame as pg
+from Obstacle import Obstacle 
 from config import DISPLAY_SIZE
 
 
@@ -104,7 +105,7 @@ class Player(pg.sprite.Sprite):
                 if self.direction == dir:
                     if key[keydict[dir]] == 1:
                         self.change_direction()
-                        return 1
+                        return None
                     elif key[keydict[dir]] == 0:
                         self.velocity = 0.25
 
@@ -135,20 +136,22 @@ class Player(pg.sprite.Sprite):
             self.moving = False
 
         self.change_direction()
-        if self.check_collision(obstacles) == 'door':
-            return 'door'
+        obs_ = self.check_collision(obstacles)
+        if isinstance(obs_,Obstacle) == True :
+            return obs_
 
     def check_collision(self, group):
         evn = ""
         obstacles = []
         hit = ""
         hits = False
+        obs = ""
         
         for key in group.keys():
             obstacles = []
             for obstacle in group[key]:
                 obstacles.append(obstacle.rect)
-
+                obs = obstacle
             hit = self.hit_rect.collidelist(obstacles)
             hits = False if hit == -1 else True
             
@@ -216,7 +219,7 @@ class Player(pg.sprite.Sprite):
                                     self.velocity = 0
         
         elif evn == "door":
-            if self.direction == 'up':
-                return 'door'
+            #if self.direction == 'up':
+            return obs
 
             
