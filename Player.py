@@ -64,6 +64,7 @@ class Player(pg.sprite.Sprite):
 
         self.direction = 'down'
         self.moving = False
+        self.pause = False
 
     def player_position(self):
         """ Returns the player position coordinates """
@@ -99,6 +100,9 @@ class Player(pg.sprite.Sprite):
             'up': pg.K_UP,
             'down': pg.K_DOWN
         }
+
+        if self.pause == True:
+            return None
 
         if self.velocity == 0:
             for dir in ['right', 'left', 'up', 'down']:

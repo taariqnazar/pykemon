@@ -24,6 +24,8 @@ class Game:
 
         self.debug_mode = debug_mode
         self.game_running = False
+        
+        self.pause_timer = 0
 
     def run(self):
         clock = pg.time.Clock()
@@ -49,18 +51,23 @@ class Game:
 
             # Handles movement and sprite changes
             self.adjust_camera_obstacles(self.map.tiles["obstacles"])
+            if self.player.pause == True:
+                self.pause_timer -= 1
+                if self.pause_timer == 0:
+                    self.player.pause = False
+                    
             player_event = self.player.move(dt, self.map.tiles["obstacles"])
+            
 
 
             if player_event !=None:
                 if player_event.type == "door":
                     self.fade(0, 255, 15)
                     print(player_event)
-                    
+                    self.pause_player(15)
                     self.player.dx = self.maps[player_event.id][1]
                     self.player.dy = self.maps[player_event.id][2]
                     self.map.rerender_map(self.maps[player_event.id][0])
-                    
                     self.fade(255, 0, -15)
                 elif player_event.type =="item" :
                     print("gacha")
@@ -152,6 +159,10 @@ class Game:
             self.game_display.blit(s, (0,0))   
             pg.display.flip()
             pg.time.wait(20)
+            
+    def pause_player(self, duration):
+        self.player.pause = True
+        self.pause_timer = duration
 
 
 def main():
